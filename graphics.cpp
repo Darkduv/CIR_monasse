@@ -122,7 +122,7 @@ void go_to(const Case c1, const Case c2, Piece* p){
     clr_case(c2);
     display_piece(p, c2);
 }
-bool click_move(Case& c_start, Case& c_end){
+bool click_move(Joueur& J, Case& c_start, Case& c_end){
     int x, y;
     int count = 0;
     while (count < 2 && getMouse(x, y) != 3){  // right click = 3 = No more moves, I wanna stop
@@ -130,11 +130,14 @@ bool click_move(Case& c_start, Case& c_end){
         int i = (x-MARGIN)/SPACE;
         int j = 7-(y-MARGIN)/SPACE;
         if (count==1){
-            cout << "Got starting Case" << endl;
             c_start.set(i, j);
+            Piece* p=J.get_board()->get(c_start);
+            if (p==nullptr || p->get_color()!=J.get_color()){
+                count=0;
+            }
         }
         else if (count==2) {
-            cout << "Got ending Case" << endl;
+            //cout << "Got ending Case" << endl;
             c_end.set(i, j);
         }
     }

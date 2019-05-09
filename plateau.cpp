@@ -61,10 +61,10 @@ void Plateau::set(Piece* p, Case c){
     plateau[c.get(0)*8+c.get(1)]=p;
 }
 
-void Plateau::bouge(Piece* p, Case c){
+bool Plateau::bouge(Piece* p, Case c){
     int i = permission_bouge(p,c);
     if (i==0){
-        return;
+        return false;
     }
     else if (i==2 || i==5){ // prise "normale"
         delete get(c);
@@ -74,7 +74,6 @@ void Plateau::bouge(Piece* p, Case c){
         delete peut_etre_pris_en_passant;
         Case est_pris_en_passant(c.get(0), p->get().get(1));
         clr_case(est_pris_en_passant);
-
     }
     else if (i==7 || i==8){ // petit ou grand roque, on "pré-bouge" la tour
         int row = c.get(1)+1;
@@ -91,8 +90,7 @@ void Plateau::bouge(Piece* p, Case c){
         go_to(case_tour, new_case_tour, tour);
         set(tour, new_case_tour);
         set(nullptr, case_tour);
-        tour->bouge(case_tour);
-
+        tour->bouge(new_case_tour);
     }
     if (i==6){
         peut_etre_pris_en_passant = p;
@@ -117,18 +115,8 @@ void Plateau::bouge(Piece* p, Case c){
     set(p,c);
     set(nullptr,p->get());
     p->bouge(c);
+    return true;
 
-}
-
-void Plateau::mange_vieux(Piece *p, Case c){
-    if (permission_mange(p,c)){
-        clr_case(c);
-        go_to(p->get(),c,p);
-        delete get(c); // on supprime la pièce
-        set(p,c);
-        set(nullptr,p->get());
-        p->bouge(c);
-    }
 }
 
 /* Permissions bouge :

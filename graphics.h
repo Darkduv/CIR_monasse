@@ -7,6 +7,7 @@
 using namespace Imagine;
 
 class Case;
+class Joueur;
 
 const int SPACE=90;
 const int FONT_SIZE = 30;
@@ -23,5 +24,5 @@ void display_piece(const Piece* p, const Case c);
 void display_byte(const Piece* p, const Case c, const bool xor_mode=false, const double fact=1.);
 void clr_case(const Case c);
 void go_to(const Case c1, const Case c2, Piece* p);
-bool click_move(Case& c_start, Case& c_end);
+bool click_move(Joueur& J,Case& c_start, Case& c_end);
 void display_board(const Plateau& p);

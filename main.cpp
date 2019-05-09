@@ -5,44 +5,35 @@ using namespace std;
 #include "piece.h"
 #include "plateau.h"
 #include "graphics.h"
+#include "joueur.h"
 
 int main()
 {
     display_grid_empty();
     load_all_pieces();
     Plateau b;
+    Joueur J1(b,1);
+    Joueur J2(b,0);
     display_board(b);
-    click();
-    b.affiche();
     Case c1, c2;
-    while(click_move(c1, c2)){
-        b.bouge(b.get(c1), c2);
+    int tour=0;
+    while(!J1.get_checkmate() && !J2.get_checkmate()){
+        if (tour%2==0){
+            cout << "white plays" << endl;
+            click_move(J1,c1,c2);
+            while (!(J1.bouge(b.get(c1), c2))){
+                click_move(J1,c1,c2);
+            }
+        }
+        else{
+            cout << "black plays" << endl;
+            click_move(J2,c1,c2);
+            while (!(J2.bouge(b.get(c1), c2))){
+                click_move(J2,c1,c2);
+            }
+        }
+        ++tour;
     }
-    click();
-    b.bouge(b.get(Case('A',2)),Case('A',3));
-    click();
-    b.bouge(b.get(Case('A',3)),Case('A',4));
-    click();
-    b.bouge(b.get(Case('A',1)),Case('A',3));
-    click();
-    b.bouge(b.get(Case('A',3)),Case('G',3));
-    click();
-    b.bouge(b.get(Case('B',1)),Case('A',3));
-    click();
-    b.bouge(b.get(Case('C',2)),Case('C',3));
-    click();
-    b.bouge(b.get(Case('D',2)),Case('D',3));
-    click();
-    b.bouge(b.get(Case('C',1)),Case('H',6));
-    click();
-    b.mange_vieux(b.get(Case('G',3)),Case('G',7));
-    /*
-    cout <<p.bouge(p.get(Case(0,1)),Case(0,2)) << endl;
-    go_to(Case(0,1),Case(0,2), p.get(Case(0, 2)));
-    click();
-    cout <<p.bouge(p.get(Case(0,6)),Case(0,5)) << endl;
-    go_to(Case(0,1),Case(0,2), p.get(Case(0, 2)));
-    */
     click();
     return 0;
 }
