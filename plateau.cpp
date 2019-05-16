@@ -116,26 +116,20 @@ bool Plateau::bouge(Piece* p, Case c){
         int promoted = which_promotion(c);
         int col_joueur = p->get_color();
 
-        std::cout <<" avant : " << p->get_name() << std::endl;
         switch(promoted){
         case 0:
             p = new Cavalier(p->get(), col_joueur);
-            std::cout << p->get_name() << std::endl;
             break;
         case 1:
             p = new Dame(p->get(), col_joueur);
-            std::cout << p->get_name() << std::endl;
             break;
         case 2:
             p = new Fou(p->get(), col_joueur);
-            std::cout << p->get_name() << std::endl;
             break;
         case 3:
             p = new Tour(p->get(), col_joueur);
-            std::cout << p->get_name() << std::endl;
             break;
         }
-        std::cout <<"apres "<< p->get_name() << std::endl;
     }
     go_to(p->get(),c,p);
     set(p,c);
