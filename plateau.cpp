@@ -98,7 +98,7 @@ bool Plateau::bouge(Piece* p, Case c){
     else{
         peut_etre_pris_en_passant = nullptr;
     }
-    // gestion du roque por supprimer le droit d'en faire un.
+    // gestion du roque pour supprimer le droit d'en faire un.
     if (p->get_name()=="roi" && (petit_roque || grand_roque)){
         petit_roque = grand_roque = false;
     }
@@ -208,7 +208,6 @@ bool Plateau::permission_mange(Piece *p, Case c){
     }
     else return false;
 }
-
 
 void Plateau::affiche() const{
     std::cout << "DEBUT AFFICHE PLATEAU" << std::endl;
