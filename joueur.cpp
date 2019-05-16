@@ -22,6 +22,7 @@ Joueur::Joueur(Plateau& p, int col){
             }
         }
     }
+
 }
 Joueur::~Joueur(){
     delete [] boite;
@@ -54,6 +55,8 @@ Piece* Joueur::get_my_king(){
 
 bool Joueur::bouge(Piece* p, Case c){ // vérifie si la couleur de la pièce est identique à celle du joueur avant de bouger
     if (p!=nullptr && p->get_color()==get_color()){
+        // pour pouvoir tester quand même parceque là c'est pénible
+        return ptr_b->bouge(p,c);
         if (p->get_name()!="roi" && !can_eat_me(c)){
         return ptr_b->bouge(p,c);
         }

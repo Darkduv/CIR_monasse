@@ -153,3 +153,32 @@ void display_board(const Plateau& p){
         }
     }
 }
+
+// Promotion choice.
+
+void display_promotion(Case c, int col){
+    int x, y;
+    coord(c, x, y);
+    clr_case(c);
+    string s = string(1, "bw"[col]);
+    putAlphaColorImage(x, y, byte_pieces[s+for_promotion[0]],  SPACE, SPACE, false, 0.5);
+    putAlphaColorImage(x+SPACE/2, y, byte_pieces[s+for_promotion[1]],  SPACE, SPACE, false, 0.5);
+    putAlphaColorImage(x, y+SPACE/2, byte_pieces[s+for_promotion[2]],  SPACE, SPACE, false, 0.5);
+    putAlphaColorImage(x+SPACE/2, y+SPACE/2, byte_pieces[s+for_promotion[3]],  SPACE, SPACE, false, 0.5);
+}
+
+int which_promotion(Case c){
+    int x, y;
+    int i, j;
+    do {
+        getMouse(x, y);
+        i = (x-MARGIN)/SPACE;
+        j = 7-(y-MARGIN)/SPACE;
+    }
+    while (i!=c.get(0) || j != c.get(1));
+    int ii, jj;
+    ii = (x-MARGIN-i*SPACE)/(SPACE/2);
+    jj = (7*SPACE - (y-MARGIN)-j*SPACE)/(SPACE/2);
+    return ii+2*jj;
+}
+

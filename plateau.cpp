@@ -111,6 +111,32 @@ bool Plateau::bouge(Piece* p, Case c){
         }
     }
     // fin gestion du roque
+    if (i==4 || i==5){
+        display_promotion(c, p->get_color());
+        int promoted = which_promotion(c);
+        int col_joueur = p->get_color();
+
+        std::cout <<" avant : " << p->get_name() << std::endl;
+        switch(promoted){
+        case 0:
+            p = new Cavalier(p->get(), col_joueur);
+            std::cout << p->get_name() << std::endl;
+            break;
+        case 1:
+            p = new Dame(p->get(), col_joueur);
+            std::cout << p->get_name() << std::endl;
+            break;
+        case 2:
+            p = new Fou(p->get(), col_joueur);
+            std::cout << p->get_name() << std::endl;
+            break;
+        case 3:
+            p = new Tour(p->get(), col_joueur);
+            std::cout << p->get_name() << std::endl;
+            break;
+        }
+        std::cout <<"apres "<< p->get_name() << std::endl;
+    }
     go_to(p->get(),c,p);
     set(p,c);
     set(nullptr,p->get());
@@ -125,7 +151,7 @@ bool Plateau::bouge(Piece* p, Case c){
  *  - 2 = Oui, prise de piece
  *  - 3 = Oui, fait une prise en passant
  *  - 4 = Oui, promotion d'un pion.
- *  - 5 = Oui, promotion en prenant d'un pion
+ *  - 5 = Oui, promotion en prenant
  *  - 6 = Oui, pourra être pris en passant
  *  - 7 = Petit Roque
  *  - 8 = Grand Roque */
