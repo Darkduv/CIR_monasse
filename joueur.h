@@ -23,7 +23,8 @@ public:
     Piece* get_my_king();
     bool get_checkmate();
     bool get_check();
-    bool can_eat_me(Case c);
+    bool can_eat_me(Case c,Piece* p = nullptr);
+    bool is_checkmate();
     void set_other_player(Joueur* J2);
     ~Joueur();
 };

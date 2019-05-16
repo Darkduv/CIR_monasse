@@ -13,7 +13,7 @@ public:
     Plateau();
     ~Plateau();
     void affiche() const;
-    bool bouge(Piece* p, Case c); // bouge une piece
+    bool bouge(Piece* p, Case c,int i = -1); // bouge une piece
     int permission_bouge(Piece* p, Case c);
     bool permission_mange(Piece* p, Case c);
     Piece* get(Case c) const; // accesseur du plateau

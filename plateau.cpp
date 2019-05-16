@@ -61,8 +61,8 @@ void Plateau::set(Piece* p, Case c){
     plateau[c.get(0)*8+c.get(1)]=p;
 }
 
-bool Plateau::bouge(Piece* p, Case c){
-    int i = permission_bouge(p,c);
+bool Plateau::bouge(Piece* p, Case c,int i){
+    if (i==-1) int i = permission_bouge(p,c);
     if (i==0){
         return false;
     }
