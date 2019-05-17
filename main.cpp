@@ -19,6 +19,7 @@ int main()
     display_board(b);
     Case c1, c2;
     int tour=0;
+    // il faut changer la fonciton permission mange pour pouvoir l'appeler sur uen case vide pour simuler la présence de la piece sans la déplacer
     while(!J1.get_checkmate() && !J2.get_checkmate()){
         if (tour%2==0){
             cout << "white plays" << endl;

@@ -62,7 +62,8 @@ void Plateau::set(Piece* p, Case c){
 }
 
 bool Plateau::bouge(Piece* p, Case c,int i){
-    if (i==-1) int i = permission_bouge(p,c);
+    if (i==-1) i = permission_bouge(p,c);
+    std::cout << i << std::endl;
     if (i==0){
         return false;
     }
@@ -78,6 +79,7 @@ bool Plateau::bouge(Piece* p, Case c,int i){
     else if (i==7 || i==8){ // petit ou grand roque, on "pré-bouge" la tour
         int row = c.get(1)+1;
         Case case_tour, new_case_tour;
+        std::cout << "hey" << std::endl;
         if (i==7) {
             case_tour.set('H', row);
             new_case_tour.set('F', row);
@@ -166,6 +168,7 @@ int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de 
         if (std::abs(dx)==2 && (dy != 0 || (!petit_roque && !grand_roque))) return false;
         if (dx == 2 && petit_roque){
             std::cout << "yolo" << std::endl;
+            std::cout << get(p->get()+dc) << std::endl;
             if (get(p->get()+dc) != nullptr) return 0;
             else return 7;
         }
@@ -203,10 +206,13 @@ int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de 
 // inutile ? ?
 bool Plateau::permission_mange(Piece *p, Case c){
     if (get(c)==nullptr) return false; // on ne peut pas manger du vide
-    else if (p->get_color()!=get(c)->get_color()){
-        return (permission_bouge(p,c)==2);
+    else {
+        if (p!=nullptr && p->get_color()!=get(c)->get_color()){
+            int permi=permission_bouge(p,c);
+            return (permi==2|| permi==5);
+        }
+        else return false;
     }
-    else return false;
 }
 
 void Plateau::affiche() const{
