@@ -26,3 +26,6 @@ void clr_case(const Case c);
 void go_to(const Case c1, const Case c2, Piece* p);
 bool click_move(Joueur& J,Case& c_start, Case& c_end);
 void display_board(const Plateau& p);
+int which_promotion(const Case c);
+const std::string for_promotion[4] = {"cavalier", "dame", "fou", "tour"};
+void display_promotion(Case c, int col);

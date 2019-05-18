@@ -22,6 +22,7 @@ Joueur::Joueur(Plateau& p, int col){
             }
         }
     }
+
 }
 Joueur::~Joueur(){
     delete [] boite;
