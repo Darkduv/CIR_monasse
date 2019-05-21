@@ -36,9 +36,6 @@ void Joueur::affiche() const{
 }
 
 void Joueur::kill_piece(Piece* p){
-    std::cout << p->get_name() << std::endl;
-    std::cout << p << std::endl;
-    std::cout << "toto" << std::endl;
     for(int i=0;i<8*2;i++){
         if (boite[i]==p){
             std::cout<<"travail terminé"<< std::endl;
@@ -46,10 +43,21 @@ void Joueur::kill_piece(Piece* p){
     }
 }
 
+void Joueur::set_piece(Piece* p){
+    for(int i=0;i<8*2;i++){
+        if (boite[i]==nullptr){
+            std::cout<<"travail terminé"<< std::endl;
+            boite[i]=p;}
+    }
+}
+void Joueur::set_petit_roque(bool value){petit_roque=value;}
+void Joueur::set_grand_roque(bool value){grand_roque=value;}
 int Joueur::get_color(){return color;}
 Piece** Joueur::get_boite(){return boite;}
 bool Joueur::get_check(){return check;}
 bool Joueur::get_checkmate(){return checkmate;}
+bool Joueur::get_petit_roque(){return petit_roque;}
+bool Joueur::get_grand_roque(){return grand_roque;}
 Plateau* Joueur::get_board(){return ptr_b;}
 void Joueur::set_other_player(Joueur* J){J2=J;}
 
@@ -62,6 +70,23 @@ Piece* Joueur::get_my_king(){
 
 bool Joueur::is_checkmate(){};
 
+bool Joueur::bouge(Piece* p, Case c){
+    if (p!=nullptr && p->get_color()==get_color()){
+        if (can_eat_me(get_my_king()->get())){
+            std::cout<<"attention, le roi est en echec" << std::endl;
+            if (p->get_name()=="roi"){
+                if (!can_eat_me(c)) return ptr_b->bouge(p,c); // si on peut echapper a lechec en se déplaçant on le fait
+                else return false;
+            }
+
+
+        }
+        else return ptr_b->bouge(p,c);
+    }
+    else return false;
+}
+
+/*
 bool Joueur::bouge(Piece* p, Case c){ // vérifie si la couleur de la pièce est identique à celle du joueur avant de bouger
     if (p!=nullptr && p->get_color()==get_color()){
         Piece* myking = get_my_king();
@@ -143,9 +168,9 @@ bool Joueur::bouge(Piece* p, Case c){ // vérifie si la couleur de la pièce est
         }
     }
     return false;
-}
+}*/
 
-bool Joueur::can_eat_me(Case c,Piece* p){
+bool Joueur::can_eat_me(Case c,Piece* p){ // permet de retirer une pièce p au test => echecs à découvert
     Piece** ptr_boite = J2->get_boite();
     for (int i=0;i<8*2;i++) {
         if (ptr_boite[i]!=p && ptr_b->permission_mange(ptr_boite[i],c)){

@@ -16,6 +16,7 @@ public:
     Joueur (Plateau& p, int col);
     void affiche() const;
     void kill_piece(Piece* p);
+    void set_piece(Piece* p);
     bool bouge(Piece* p,Case c);
     Plateau* get_board();
     int get_color();
@@ -23,8 +24,12 @@ public:
     Piece* get_my_king();
     bool get_checkmate();
     bool get_check();
+    bool get_petit_roque();
+    bool get_grand_roque();
     bool can_eat_me(Case c,Piece* p = nullptr);
     bool is_checkmate();
     void set_other_player(Joueur* J2);
+    void set_petit_roque(bool value);
+    void set_grand_roque(bool value);
     ~Joueur();
 };

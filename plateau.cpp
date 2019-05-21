@@ -4,8 +4,9 @@
 
 Plateau::Plateau(){
     peut_etre_pris_en_passant = nullptr;
-    petit_roque = grand_roque = true;
     plateau = new Piece*[8*8];
+    J1=nullptr;
+    J2=nullptr;
     // On place les blancs
     set(new Tour(Case('A',1),1),Case('A',1));
     set(new Cavalier(Case('B',1),1),Case('B',1));
@@ -46,6 +47,11 @@ Plateau::~Plateau(){
     delete [] plateau;
 }
 
+void Plateau::set_joueur(Joueur* Jo1, Joueur* Jo2){
+    J1=Jo1;
+    J2=Jo2;
+}
+
 Piece* Plateau::operator[](Case c) const{
     return plateau[c.get(0)*8+c.get(1)];
 }
@@ -61,7 +67,21 @@ void Plateau::set(Piece* p, Case c){
     plateau[c.get(0)*8+c.get(1)]=p;
 }
 
-bool Plateau::bouge(Piece* p, Case c,int i){
+bool Plateau::bouge(Piece* p, Case c, int i){
+    Joueur* J_moving = nullptr;
+    Joueur* J_waiting = nullptr;
+    switch (p->get_color()) { //J1 est de couleur 1
+    case 0:
+        J_moving = J2;
+        J_waiting = J1;
+        break;
+    case 1:
+        J_moving = J1;
+        J_waiting = J2;
+        break;
+    }
+    bool petit_roque = J_moving->get_petit_roque();
+    bool grand_roque = J_moving->get_grand_roque();
     if (i==-1) i = permission_bouge(p,c);
     std::cout << i << std::endl;
     if (i==0){
@@ -69,10 +89,12 @@ bool Plateau::bouge(Piece* p, Case c,int i){
     }
     else if (i==2 || i==5){ // prise "normale"
         delete get(c);
+        J_waiting->kill_piece(get(c));
         clr_case(c);
     }
     else if (i==3){ // prise "en passant"
         delete peut_etre_pris_en_passant;
+        J_waiting->kill_piece(peut_etre_pris_en_passant);
         Case est_pris_en_passant(c.get(0), p->get().get(1));
         clr_case(est_pris_en_passant);
     }
@@ -102,14 +124,15 @@ bool Plateau::bouge(Piece* p, Case c,int i){
     }
     // gestion du roque pour supprimer le droit d'en faire un.
     if (p->get_name()=="roi" && (petit_roque || grand_roque)){
-        petit_roque = grand_roque = false;
+        J_moving->set_grand_roque(false);
+        J_moving->set_petit_roque(false);
     }
     else if (p->get_name()=="tour"  && p->get().get(1) == 0+7*((p->get_color()+1)%2)){
         if (p->get().get(0) == 0 && grand_roque){
-            grand_roque = false;
+            J_moving->set_grand_roque(false);
         }
         else if (p->get().get(0) == 7 && petit_roque){
-            petit_roque = true;
+            J_moving->set_petit_roque(false);
         }
     }
     // fin gestion du roque
@@ -117,21 +140,27 @@ bool Plateau::bouge(Piece* p, Case c,int i){
         display_promotion(c, p->get_color());
         int promoted = which_promotion(c);
         int col_joueur = p->get_color();
-
-        switch(promoted){
+        Case position_p = p->get();
+        J_moving->kill_piece(p);
+        delete p; // on supprime le pion en libérant la mémoire
+        if (i==5) {
+            J_waiting->kill_piece(get(c)); // on supprime de la boite la pièce prise
+        }
+        switch(promoted){ // on recréer la pièce
         case 0:
-            p = new Cavalier(p->get(), col_joueur);
+            p = new Cavalier(position_p, col_joueur);
             break;
         case 1:
-            p = new Dame(p->get(), col_joueur);
+            p = new Dame(position_p, col_joueur);
             break;
         case 2:
-            p = new Fou(p->get(), col_joueur);
+            p = new Fou(position_p, col_joueur);
             break;
         case 3:
-            p = new Tour(p->get(), col_joueur);
+            p = new Tour(position_p, col_joueur);
             break;
         }
+        J_moving->set_piece(p); // on ajoute à la boite a pièce
     }
     go_to(p->get(),c,p);
     set(p,c);
@@ -155,6 +184,20 @@ bool Plateau::bouge(Piece* p, Case c,int i){
 
 // TODO : à compléter (echec)
 int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de bouger en connaissant le plateau, string pour indiquer quel piece bouge
+    Joueur* J_moving = nullptr;
+    Joueur* J_waiting = nullptr;
+    switch (p->get_color()) { //J1 est de couleur 1
+    case 0:
+        J_moving = J2;
+        J_waiting = J1;
+        break;
+    case 1:
+        J_moving = J1;
+        J_waiting = J2;
+        break;
+    }
+    bool petit_roque = J_moving->get_petit_roque();
+    bool grand_roque = J_moving->get_grand_roque();
     if (p == nullptr) return 0; //on ne peut pas bouger du vide
     if (c == p->get()) return 0; // on ne peut pas bouger sur la même case
     int must_take_or_not = 1;
@@ -226,12 +269,20 @@ int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de 
 // inutile ? ?
 bool Plateau::permission_mange(Piece *p, Case c){
     if (get(c)==nullptr) return false; // on ne peut pas manger du vide
+    if (p->get_name()=="cavalier") {
+        return p->permission_bouge(c); // si je suis un cavalier, on cherche juste à voir si la case est accessible
+    }
     else {
-        if (p!=nullptr && p->get_color()!=get(c)->get_color()){
-            int permi=permission_bouge(p,c);
-            return (permi==2|| permi==5);
+        Deplacement dc = d_deplacement(p->get(), c);
+        Case c_test = p->get();
+        int dx = c.get(0) - c_test.get(0);
+        int dy = c.get(1) - c_test.get(1);
+        int dl = std::max(std::abs(dx), std::abs(dy));
+        for (int i=1;i < dl;i++){
+            c_test = c_test+dc;
+            if (get(c_test) != nullptr) return false; // Case occupée sur le déplacement
         }
-        else return false;
+        return p->permission_bouge(c); // on a vérifié que toutes les cases sont libres,
     }
 }
 

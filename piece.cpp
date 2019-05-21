@@ -68,7 +68,7 @@ void Tour::bouge(Case case_arrivee){
 // Gestion des déplacements possibles
 
 bool Roi::permission_bouge(Case case_arrive) const {
-    if (case_arrive.distance(c)<=2) return true;
+    if (case_arrive.distance(c)<=1) return true;
     else return false;
 }
 

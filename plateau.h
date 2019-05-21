@@ -8,7 +8,8 @@
 class Plateau {
     Piece** plateau; // On met le plateau en privé, si une pièce veut checker qu'elle peut bouger on demande le reseignement au tableau avec une méthode
     Piece* peut_etre_pris_en_passant;
-    bool petit_roque, grand_roque;
+    Joueur* J1;
+    Joueur* J2;
 public:
     Plateau();
     ~Plateau();
@@ -20,4 +21,5 @@ public:
     Piece* get(int i, int j) const;
     Piece* operator[](Case c) const;
     void set(Piece* p, Case c);
+    void set_joueur(Joueur* Jo1, Joueur* Jo2);
 };

@@ -16,6 +16,7 @@ int main()
     Joueur J2(b,0);
     J1.set_other_player(&J2);
     J2.set_other_player(&J1);
+    b.set_joueur(&J1,&J2);
     display_board(b);
     Case c1, c2;
     int tour=0;
