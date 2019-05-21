@@ -81,14 +81,13 @@ bool Joueur::is_checkmate(){};
 
 bool Joueur::bouge(Piece* p, Case c){
     if (p!=nullptr && p->get_color()==get_color()){
-        if (can_eat_me(get_my_king()->get())){
+        if (can_eat_me(get_my_king()->get()) != nullptr){
             std::cout<<"attention, le roi est en echec" << std::endl;
             if (p->get_name()=="roi"){
-                if (!can_eat_me(c)) return ptr_b->bouge(p,c); // si on peut echapper a lechec en se déplaçant on le fait
+                if (can_eat_me(c) == nullptr) return ptr_b->bouge(p,c); // si on peut echapper a lechec en se déplaçant on le fait
                 else return false;
             }
             else if (ptr_b->get(c)==nullptr){
-
             }
         }
         else if (p->get_name()=="roi"){
@@ -198,13 +197,14 @@ bool Joueur::bouge(Piece* p, Case c){ // vérifie si la couleur de la pièce est
     return false;
 }*/
 
-bool Joueur::can_eat_me(Case c){ // permet de retirer une pièce p au test => echecs à découvert
-    //J2->affiche();
-    Piece** ptr_boite = J2->get_boite();
-    for (int i=0;i<8*2;i++) {
-        //if (ptr_boite [i] !=nullptr) std::cout << ptr_boite[i]->get_name() << std::endl;
-        if (ptr_boite [i] !=nullptr && ptr_b->permission_mange(ptr_boite[i],c)) return true;
-    }
-    return false;
-}
 
+Piece* Joueur::can_eat_me(Case c){ // permet de retirer une pièce p au test => echecs à découvert
+    Piece** tr_boite = J2->get_boite();
+    for (int i=0;i<8*2;i++) {
+        if (ptr_boite[i]!=nullptr && ptr_b->permission_mange(ptr_boite[i],c)){
+            std::cout << "A piece of the following type can eat me : " << ptr_boite[i]->get_name() << " and is on the case("<<ptr_boite[i]->get().get(0)<<","<<ptr_boite[i]->get().get(1)<<")"<< std::endl;
+            return ptr_boite[i];
+        }
+    }
+    return nullptr;
+}

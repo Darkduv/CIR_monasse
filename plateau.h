@@ -16,7 +16,7 @@ public:
     void affiche() const;
     bool bouge(Piece* p, Case c,int i = -1); // bouge une piece
     int permission_bouge(Piece* p, Case c);
-    bool permission_mange(Piece* p, Case c);
+    bool permission_mange(Piece* p, Case c, Piece* ghosted=nullptr);
     Piece* get(Case c) const; // accesseur du plateau
     Piece* get(int i, int j) const;
     Piece* operator[](Case c) const;

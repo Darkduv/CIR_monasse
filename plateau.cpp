@@ -93,7 +93,7 @@ bool Plateau::bouge(Piece* p, Case c, int i){
         clr_case(c);
     }
     else if (i==3){ // prise "en passant"
-        set(nullptr,peut_etre_pris_en_passant->get());
+        set(nullptr, peut_etre_pris_en_passant->get());
         delete peut_etre_pris_en_passant;
         J_waiting->kill_piece(peut_etre_pris_en_passant);
         Case est_pris_en_passant(c.get(0), p->get().get(1));
@@ -267,10 +267,20 @@ int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de 
 }
 
 
-bool Plateau::permission_mange(Piece *p, Case c){
-    if (c==p->get()) return false;
+
+bool Plateau::permission_mange(Piece *p, Case c, Piece* ghosted){
+    if (c == p->get()) return false;
     if (p->get_name()=="cavalier") {
         return p->permission_bouge(c); // si je suis un cavalier, on cherche juste à voir si la case est accessible
+    }
+    else if (p->get_name()=="pion"){
+        std::cout << "yyolo cooucou" << std::endl;
+        Case cp = p->get();
+        int dy = 1; // a white (col=1) pawn can only go up
+        if (p->get_color()==0)
+            dy = -1; // a black (col=0) pawn can only go down
+        std::cout << dy << " " << cp.get(0) << " " << cp.get(1) << " "<< c.get(0) << " " << c.get(1) << std::endl;
+        return std::abs(cp.get(0)-c.get(0)) == 1 && cp.get(1)+dy == c.get(1);
     }
     else {
         Deplacement dc = d_deplacement(p->get(), c);
@@ -280,7 +290,7 @@ bool Plateau::permission_mange(Piece *p, Case c){
         int dl = std::max(std::abs(dx), std::abs(dy));
         for (int i=1;i < dl;i++){
             c_test = c_test+dc;
-            if (get(c_test) != nullptr) return false; // Case occupée sur le déplacement
+            if (get(c_test) != nullptr && get(c_test) != ghosted) return false; // Case occupée sur le déplacement
         }
         return p->permission_bouge(c); // on a vérifié que toutes les cases sont libres,
     }
