@@ -23,18 +23,22 @@ int main()
     // il faut changer la fonciton permission mange pour pouvoir l'appeler sur uen case vide pour simuler la présence de la piece sans la déplacer
     while(!J1.get_checkmate() && !J2.get_checkmate()){
         if (tour%2==0){
+
             cout << "white plays" << endl;
             click_move(J1,c1,c2);
             while (!(J1.bouge(b.get(c1), c2))){
                 click_move(J1,c1,c2);
             }
+            b.affiche();
         }
         else{
+
             cout << "black plays" << endl;
             click_move(J2,c1,c2);
             while (!(J2.bouge(b.get(c1), c2))){
                 click_move(J2,c1,c2);
             }
+            b.affiche();
         }
         ++tour;
     }

@@ -29,6 +29,15 @@ Joueur::~Joueur(){
 }
 
 void Joueur::affiche() const{
+    switch (color) {
+    case 0:
+        std::cout << "Couleur du joueur NOIRE" << std::endl;
+        break;
+    case 1:
+        std::cout << "Couleur du joueur BLANCHE" << std::endl;
+        break;
+    }
+
     for(int i=0;i<8*2;i++){
         if (boite[i]==nullptr) std::cout << "attention nul" << std::endl;
         else std::cout << boite[i]->get_name() << " : " << boite[i]->get().get(0) << boite[i]->get().get(1) << std::endl;
@@ -78,10 +87,29 @@ bool Joueur::bouge(Piece* p, Case c){
                 if (!can_eat_me(c)) return ptr_b->bouge(p,c); // si on peut echapper a lechec en se déplaçant on le fait
                 else return false;
             }
+            else if (ptr_b->get(c)==nullptr){
 
-
+            }
         }
-        else return ptr_b->bouge(p,c);
+        else if (p->get_name()=="roi"){
+            if (!can_eat_me(c)) return ptr_b->bouge(p,c);
+            else return false;
+        }
+        else {
+            Case pos=p->get();
+            ptr_b->set(nullptr,pos);
+            std::cout << "toto" << std::endl;
+            std::cout << can_eat_me(get_my_king()->get()) << std::endl;
+            if (!can_eat_me(get_my_king()->get())){
+                ptr_b->set(p,pos);
+                return ptr_b->bouge(p,c);
+            }
+            else {
+                ptr_b->set(p,pos);
+                p->bouge(pos);
+                return false;
+            }
+        }
     }
     else return false;
 }
@@ -170,13 +198,12 @@ bool Joueur::bouge(Piece* p, Case c){ // vérifie si la couleur de la pièce est
     return false;
 }*/
 
-bool Joueur::can_eat_me(Case c,Piece* p){ // permet de retirer une pièce p au test => echecs à découvert
+bool Joueur::can_eat_me(Case c){ // permet de retirer une pièce p au test => echecs à découvert
+    //J2->affiche();
     Piece** ptr_boite = J2->get_boite();
     for (int i=0;i<8*2;i++) {
-        if (ptr_boite[i]!=p && ptr_b->permission_mange(ptr_boite[i],c)){
-            std::cout << "toto" << ptr_boite[i]->get_name() << std::endl;
-            return true;
-        }
+        //if (ptr_boite [i] !=nullptr) std::cout << ptr_boite[i]->get_name() << std::endl;
+        if (ptr_boite [i] !=nullptr && ptr_b->permission_mange(ptr_boite[i],c)) return true;
     }
     return false;
 }

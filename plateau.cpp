@@ -93,6 +93,7 @@ bool Plateau::bouge(Piece* p, Case c, int i){
         clr_case(c);
     }
     else if (i==3){ // prise "en passant"
+        set(nullptr,peut_etre_pris_en_passant->get());
         delete peut_etre_pris_en_passant;
         J_waiting->kill_piece(peut_etre_pris_en_passant);
         Case est_pris_en_passant(c.get(0), p->get().get(1));
@@ -266,9 +267,8 @@ int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de 
 }
 
 
-// inutile ? ?
 bool Plateau::permission_mange(Piece *p, Case c){
-    if (get(c)==nullptr) return false; // on ne peut pas manger du vide
+    if (c==p->get()) return false;
     if (p->get_name()=="cavalier") {
         return p->permission_bouge(c); // si je suis un cavalier, on cherche juste à voir si la case est accessible
     }
