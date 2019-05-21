@@ -96,15 +96,15 @@ bool Joueur::bouge(Piece* p, Case c){
         }
         else {
             Case pos=p->get();
-            ptr_b->set(nullptr,pos);
+            //ptr_b->set(nullptr,pos);
             std::cout << "toto" << std::endl;
-            std::cout << can_eat_me(get_my_king()->get()) << std::endl;
-            if (!can_eat_me(get_my_king()->get())){
-                ptr_b->set(p,pos);
+            std::cout << can_eat_me(get_my_king()->get(), p) << std::endl;
+            if (!can_eat_me(get_my_king()->get(), p)){
+                //ptr_b->set(p,pos);
                 return ptr_b->bouge(p,c);
             }
             else {
-                ptr_b->set(p,pos);
+                //ptr_b->set(p,pos);
                 p->bouge(pos);
                 return false;
             }
@@ -198,10 +198,10 @@ bool Joueur::bouge(Piece* p, Case c){ // vérifie si la couleur de la pièce est
 }*/
 
 
-Piece* Joueur::can_eat_me(Case c){ // permet de retirer une pièce p au test => echecs à découvert
-    Piece** tr_boite = J2->get_boite();
+Piece* Joueur::can_eat_me(Case c, Piece* ghosted){ // permet de retirer une pièce p au test => echecs à découvert
+    Piece** ptr_boite = J2->get_boite();
     for (int i=0;i<8*2;i++) {
-        if (ptr_boite[i]!=nullptr && ptr_b->permission_mange(ptr_boite[i],c)){
+        if (ptr_boite[i]!=nullptr && ptr_b->permission_mange(ptr_boite[i],c, ghosted)){
             std::cout << "A piece of the following type can eat me : " << ptr_boite[i]->get_name() << " and is on the case("<<ptr_boite[i]->get().get(0)<<","<<ptr_boite[i]->get().get(1)<<")"<< std::endl;
             return ptr_boite[i];
         }
