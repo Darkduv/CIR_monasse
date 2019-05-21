@@ -81,13 +81,50 @@ bool Joueur::is_checkmate(){};
 
 bool Joueur::bouge(Piece* p, Case c){
     if (p!=nullptr && p->get_color()==get_color()){
-        if (can_eat_me(get_my_king()->get()) != nullptr){
+        Piece* eater = can_eat_me(get_my_king()->get());
+        if ( eater != nullptr){
             std::cout<<"attention, le roi est en echec" << std::endl;
             if (p->get_name()=="roi"){
-                if (can_eat_me(c) == nullptr) return ptr_b->bouge(p,c); // si on peut echapper a lechec en se déplaçant on le fait
-                else return false;
+                ptr_b->set(nullptr, p->get());
+                if (can_eat_me(c) == nullptr){
+                    ptr_b->set(p, p->get());
+                    return ptr_b->bouge(p,c); // si on peut echapper a lechec en se déplaçant on le fait
+                }
+                else {
+                    ptr_b->set(p, p->get());
+                    return false;
+                }
             }
-            else if (ptr_b->get(c)==nullptr){
+            else if (ptr_b->get(c)==nullptr){ // on couvre l'échec
+                ptr_b->set(p,c);
+                ptr_b->set(nullptr, p->get());
+                if (can_eat_me(get_my_king()->get())==nullptr){
+                    ptr_b->set(nullptr,c);
+                    ptr_b->set(p, p->get());
+                    return ptr_b->bouge(p,c);
+                }
+                else {
+                    ptr_b->set(nullptr,c);
+                    ptr_b->set(p, p->get());
+                    return false;
+                }
+            }
+            else { // on mange le checker
+                if (eater->get() == c){
+                    ptr_b->set(p,c);
+                    ptr_b->set(nullptr, p->get());
+                    if (can_eat_me(get_my_king()->get(), eater)==nullptr){
+                        ptr_b->set(eater,c);
+                        ptr_b->set(p, p->get());
+                        return ptr_b->bouge(p,c);
+                    }
+                    else {
+                        ptr_b->set(eater,c);
+                        ptr_b->set(p, p->get());
+                        return false;
+                    }
+                }
+
             }
         }
         else if (p->get_name()=="roi"){
@@ -95,17 +132,12 @@ bool Joueur::bouge(Piece* p, Case c){
             else return false;
         }
         else {
-            Case pos=p->get();
-            //ptr_b->set(nullptr,pos);
             std::cout << "toto" << std::endl;
             std::cout << can_eat_me(get_my_king()->get(), p) << std::endl;
             if (!can_eat_me(get_my_king()->get(), p)){
-                //ptr_b->set(p,pos);
                 return ptr_b->bouge(p,c);
             }
             else {
-                //ptr_b->set(p,pos);
-                p->bouge(pos);
                 return false;
             }
         }
@@ -199,9 +231,15 @@ bool Joueur::bouge(Piece* p, Case c){ // vérifie si la couleur de la pièce est
 
 
 Piece* Joueur::can_eat_me(Case c, Piece* ghosted){ // permet de retirer une pièce p au test => echecs à découvert
+    // Ghosted est polymorphe xD
+    /* il peut servir pour 'oublier' une pièce adverse qui ne peut donc plus nous manger
+      OU bien il peut servir pour "oublier" une de nos pièces, pour tester si on ne "découvre pas un échec"
+      en la bougeant, i.e. notre pièce est clouée.
+    */
     Piece** ptr_boite = J2->get_boite();
+    J2->affiche();
     for (int i=0;i<8*2;i++) {
-        if (ptr_boite[i]!=nullptr && ptr_b->permission_mange(ptr_boite[i],c, ghosted)){
+        if (ptr_boite[i]!=nullptr &&ptr_boite[i]!=ghosted && ptr_b->permission_mange(ptr_boite[i],c, ghosted)){
             std::cout << "A piece of the following type can eat me : " << ptr_boite[i]->get_name() << " and is on the case("<<ptr_boite[i]->get().get(0)<<","<<ptr_boite[i]->get().get(1)<<")"<< std::endl;
             return ptr_boite[i];
         }
