@@ -19,7 +19,7 @@ public:
     void set_piece(Piece* p);
     bool bouge(Piece* p,Case c);
     Plateau* get_board();
-    int get_color();
+    int get_color() const;
     Piece** get_boite();
     Piece* get_my_king();
     bool get_checkmate();

@@ -21,9 +21,8 @@ void coord(const Case c, int&x, int&y);
 
 void display_grid_empty();
 void display_piece(const Piece* p, const Case c);
-void display_byte(const Piece* p, const Case c, const bool xor_mode=false, const double fact=1.);
 void clr_case(const Case c);
-void go_to(const Case c1, const Case c2, Piece* p);
+void go_to(const Case c1, const Case c2, const Piece* p);
 bool click_move(Joueur& J,Case& c_start, Case& c_end);
 void display_board(const Plateau& p);
 int which_promotion(const Case c);

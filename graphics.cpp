@@ -7,11 +7,10 @@ using namespace std;
  * byte* pieces functions *
  *************************/
 // to load pieces' images
-std::map<std::string, AlphaColor*> byte_pieces;
+static std::map<std::string, AlphaColor*> byte_pieces;
 
 std::string get_path_name(const string name, const string col){
-    string s = col+name;
-    return stringSrcPath("img/"+to_string(SPACE)+"/"+s+".png");
+    return stringSrcPath("img/"+to_string(SPACE)+"/"+col+name+".png");
 }
 
 AlphaColor* load_bitmap(const string name, const string col){
@@ -27,8 +26,8 @@ void initializer_map_piece(const string name, const string col){
 }
 
 void load_all_pieces(){
-    string cols[2] = {"b", "w"};
-    string names[6] = {"roi", "dame", "fou", "cavalier", "tour", "pion"};
+    const string cols[2] = {"b", "w"};
+    const string names[6] = {"roi", "dame", "fou", "cavalier", "tour", "pion"};
     for (int i=0;i < 2;i++){
         for (int j=0;j<6;j++){
             initializer_map_piece(names[j], cols[i]);
@@ -41,19 +40,19 @@ void load_all_pieces(){
  * tools functions *
  ******************/
 
+string code_name(const Piece* p){
+    return string(1, "bw"[p->get_color()])+p->get_name();
+}
+
 void coord(const Case c, int&x, int&y){
+    // give the coordinates of the pixel of the corner of the case
     x = (c.get(0))*SPACE+MARGIN;
     y = (7-c.get(1))*SPACE+MARGIN;
 }
 
 Color color_case(const Case c){
+    // gives the color of the case
     return BOARD_COLORS[(c.get(0)+c.get(1))%2];
-}
-
-std::string get_path_image(const Piece* p){
-    string col = string(1, "bw"[p->get_color()]); //b = black = 0, w = white = 1
-    string s = col+p->get_name();
-    return stringSrcPath("img/"+to_string(SPACE)+"/"+s+".png");
 }
 
 /*********************
@@ -64,60 +63,40 @@ void display_grid_empty(){
     int W = (8)*(SPACE)+2*MARGIN;
     int H = (8)*SPACE+2*MARGIN;
     openWindow(W, H, "Chessboard");
-    string columns = "ABCDEFGH";
-    string rows = "87654321";
-    for (int i=0; i < 8;i++){
-        // rows and columns
-        int x = MARGIN + i*SPACE+SPACE/2;
-        int y1 = MARGIN/2;
-        int y2 = MARGIN/2+MARGIN+8*SPACE;
-        int dx = 2*FONT_SIZE/7;
-        int dy = FONT_SIZE/2;
+    const string columns = "ABCDEFGH";
+    const string rows = "87654321";
+    const int dx = 2*FONT_SIZE/7;
+    const int dy = FONT_SIZE/2;
+    const int y1 = MARGIN/2;
+    const int y2 = MARGIN/2+MARGIN+8*SPACE;
+    for (unsigned int i=0; i < 8;i++){
+        // rows and columns numerotation
+        const int x = MARGIN + int(i)*SPACE+SPACE/2;
         drawString(x-dx, y1+dy, string(1, columns[i]), BLACK, FONT_SIZE);
         drawString(x-dx, y2+dy, string(1, columns[i]), BLACK, FONT_SIZE);
         drawString(y1-dx, x+dy, string(1, rows[i]), BLACK, FONT_SIZE);
         drawString(y2-dx, x+dy, string(1, rows[i]), BLACK, FONT_SIZE);
 
-        // cases
+        // display cases
         for (int j= 0; j < 8;j++){
-            clr_case(Case(i, j));
+            clr_case(Case(int(i), j));
         }
     }
-}
-
-void display_byte(const Piece* p, const Case c, const bool xor_mode, const double fact){
-    int x, y;
-    coord(c, x, y);
-    string name = string(1, "bw"[p->get_color()])+p->get_name();
-    putAlphaColorImage(x, y, byte_pieces[name],  SPACE, SPACE, xor_mode, fact);
 }
 
 void display_piece(const Piece* p, const Case c){
     int x, y;
     coord(c, x, y);
-    string name = string(1, "bw"[p->get_color()])+p->get_name();
+    string name = code_name(p);
     putAlphaColorImage(x, y, byte_pieces[name],  SPACE, SPACE, false);
 }
-
-/*
-void display_piece(Case c, Piece* p){
-    Image<AlphaColor> im; // Image en niveaux de gris
-    string file = get_path_image(p);
-    if (! load(im, file)) {
-        cerr << "Impossible d’ouvrir le fichier " << file << endl ;
-        exit (1);
-    }
-    int x, y;
-    coord(c, x, y);
-    display(im, x, y);
-}*/
 
 void clr_case(const Case c){
     int x, y;
     coord(c, x, y);
     fillRect(x, y, SPACE, SPACE, color_case(c));
 }
-void go_to(const Case c1, const Case c2, Piece* p){
+void go_to(const Case c1, const Case c2, const Piece* p){
     clr_case(c1);
     clr_case(c2);
     display_piece(p, c2);

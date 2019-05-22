@@ -29,14 +29,8 @@ Joueur::~Joueur(){
 }
 
 void Joueur::affiche() const{
-    switch (color) {
-    case 0:
-        std::cout << "Couleur du joueur NOIRE" << std::endl;
-        break;
-    case 1:
-        std::cout << "Couleur du joueur BLANCHE" << std::endl;
-        break;
-    }
+    std::string colstr[2] = {"NOIR", "BLANC"};
+    std::cout << "Couleur du joueur "+colstr[color]  << std::endl;
 
     for(int i=0;i<8*2;i++){
         if (boite[i]==nullptr) std::cout << "attention nul" << std::endl;
@@ -61,7 +55,7 @@ void Joueur::set_piece(Piece* p){
 }
 void Joueur::set_petit_roque(bool value){petit_roque=value;}
 void Joueur::set_grand_roque(bool value){grand_roque=value;}
-int Joueur::get_color(){return color;}
+int Joueur::get_color() const{return color;}
 Piece** Joueur::get_boite(){return boite;}
 bool Joueur::get_check(){return check;}
 bool Joueur::get_checkmate(){return checkmate;}
@@ -77,12 +71,14 @@ Piece* Joueur::get_my_king(){
     return nullptr;
 }
 
-bool Joueur::is_checkmate(){};
+bool Joueur::is_checkmate(){ // not iplemented yet
+    return false;
+};
 
 bool Joueur::bouge(Piece* p, Case c){
     if (p!=nullptr && p->get_color()==get_color()){
         Piece* eater = can_eat_me(get_my_king()->get());
-        if ( eater != nullptr){
+        if (eater != nullptr){
             std::cout<<"attention, le roi est en echec" << std::endl;
             if (p->get_name()=="roi"){
                 ptr_b->set(nullptr, p->get());
@@ -124,6 +120,7 @@ bool Joueur::bouge(Piece* p, Case c){
                         return false;
                     }
                 }
+                else return false;
 
             }
         }
@@ -142,7 +139,8 @@ bool Joueur::bouge(Piece* p, Case c){
             }
         }
     }
-    else return false;
+    else
+        return false;
 }
 
 /*
