@@ -4,13 +4,13 @@
 
 Case::Case(){};
 
-Case::Case(int i, int j){
+Case::Case(const int i, const int j){
     x=i;
     y=j;
 };
 
-Case::Case(char a, int k){
-    x=int(a)-65; // le A correspond à un 0
+Case::Case(const char a, const int k){
+    x=int(a)-65; //  'A' --> 0 : in fact int('A') = 65
     y=k-1;
 };
 
