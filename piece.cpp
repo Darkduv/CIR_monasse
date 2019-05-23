@@ -1,5 +1,5 @@
 #include "piece.h"
-#include "plateau.h"
+#include "board.h"
 #include "cmath"
 
 // name field.

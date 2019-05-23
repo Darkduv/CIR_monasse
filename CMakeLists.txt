@@ -9,8 +9,8 @@ add_executable(CHESS
                main.cpp
                case.cpp
                graphics.cpp
+               board.cpp
                player.cpp
-               plateau.cpp
                piece.cpp)
 ImagineUseModules(CHESS Graphics)
 

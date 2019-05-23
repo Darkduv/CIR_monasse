@@ -5,14 +5,14 @@
 #include "player.h"
 
 
-class Plateau {
+class Board {
     Piece** plateau; // On met le plateau en privé, si une pièce veut checker qu'elle peut bouger on demande le reseignement au tableau avec une méthode
     Piece* peut_etre_pris_en_passant;
     Player* J1;
     Player* J2;
 public:
-    Plateau();
-    ~Plateau();
+    Board();
+    ~Board();
     void affiche() const;
     bool bouge(Piece* p, Case c,int i = -1); // bouge une piece
     int permission_bouge(Piece* p, Case c);

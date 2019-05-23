@@ -110,7 +110,7 @@ void go_to(const Case c1, const Case c2, const Piece* p){
     display_piece(p, c2);
 }
 
-void display_board(const Plateau& p){
+void display_board(const Board& p){
     for (int j=0;j<8;j++){
         for (int i=0;i<8;i++){
             Piece* pp = p.get(i, j);

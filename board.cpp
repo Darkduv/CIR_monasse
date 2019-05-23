@@ -1,8 +1,8 @@
-#include "plateau.h"
+#include "board.h"
 #include "piece.h"
 #include <iostream>
 
-Plateau::Plateau(){
+Board::Board(){
     peut_etre_pris_en_passant = nullptr;
     plateau = new Piece*[8*8];
     J1=nullptr;
@@ -40,34 +40,34 @@ Plateau::Plateau(){
     }
 }
 
-Plateau::~Plateau(){
+Board::~Board(){
     for(int i=0;i<8*8;i++){
         delete plateau[i];
     }
     delete [] plateau;
 }
 
-void Plateau::set_player(Player* Jo1, Player* Jo2){
+void Board::set_player(Player* Jo1, Player* Jo2){
     J1=Jo1;
     J2=Jo2;
 }
 
-Piece* Plateau::operator[](Case c) const{
+Piece* Board::operator[](Case c) const{
     return plateau[c.get(0)*8+c.get(1)];
 }
 
-Piece* Plateau::get(Case c) const{
+Piece* Board::get(Case c) const{
     return plateau[c.get(0)*8+c.get(1)];
 }
-Piece* Plateau::get(int i, int j) const{
+Piece* Board::get(int i, int j) const{
     return plateau[i*8+j];
 }
 
-void Plateau::set(Piece* p, Case c){
+void Board::set(Piece* p, Case c){
     plateau[c.get(0)*8+c.get(1)]=p;
 }
 
-bool Plateau::bouge(Piece* p, Case c, int i){
+bool Board::bouge(Piece* p, Case c, int i){
     Player* J_moving = nullptr;
     Player* J_waiting = nullptr;
     switch (p->get_color()) { //J1 est de couleur 1
@@ -184,7 +184,7 @@ bool Plateau::bouge(Piece* p, Case c, int i){
 
 
 // TODO : à compléter (echec)
-int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de bouger en connaissant le plateau, string pour indiquer quel piece bouge
+int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bouger en connaissant le plateau, string pour indiquer quel piece bouge
     Player* J_moving = nullptr;
     Player* J_waiting = nullptr;
     switch (p->get_color()) { //J1 est de couleur 1
@@ -268,7 +268,7 @@ int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de 
 
 
 
-bool Plateau::permission_mange(Piece *p, Case c, Piece* ghosted){
+bool Board::permission_mange(Piece *p, Case c, Piece* ghosted){
     if (c == p->get()) return false;
     if (p->get_name()=="cavalier") {
         return p->permission_bouge(c); // si je suis un cavalier, on cherche juste à voir si la case est accessible
@@ -296,7 +296,7 @@ bool Plateau::permission_mange(Piece *p, Case c, Piece* ghosted){
     }
 }
 
-void Plateau::affiche() const{
+void Board::affiche() const{
     std::cout << "DEBUT AFFICHE PLATEAU" << std::endl;
     for(int j=7;j>=0;j--){
         for(int i=0;i<8;i++){

@@ -1,24 +1,24 @@
 #pragma once
 
 class Piece;
-class Plateau;
+class Board;
 class Case;
 
 class Player {
     Player* J2;
     int color;
     Piece** boite;
-    Plateau* ptr_b;
+    Board* ptr_b;
     bool check;
     bool checkmate;
     bool petit_roque, grand_roque;
 public:
-    Player (Plateau& p, int col);
+    Player (Board& p, int col);
     void affiche() const;
     void kill_piece(Piece* p);
     void set_piece(Piece* p);
     bool bouge(Piece* p,Case c);
-    Plateau* get_board();
+    Board* get_board();
     int get_color() const;
     Piece** get_boite();
     Piece* get_my_king();

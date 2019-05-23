@@ -3,7 +3,7 @@
 #include <Imagine/Images.h>
 #include <map>
 #include "piece.h"
-#include "plateau.h"
+#include "board.h"
 #include "case.h"
 #include "player.h"
 using namespace Imagine;
@@ -30,7 +30,7 @@ void display_piece(const Piece* p, const Case c);
 void clr_case(const Case c);
 void clear_and_display(const Piece* p, const Case c);
 void go_to(const Case c1, const Case c2, const Piece* p);
-void display_board(const Plateau& p);
+void display_board(const Board& p);
 
 bool click_move(Player& J,Case& c_start, Case& c_end);
 

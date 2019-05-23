@@ -2,7 +2,7 @@
 #include "case.h"
 #include <string>
 
-class Plateau; //le .h a juste besoin de savoir que le plateau existe mais pas besoin des méthodes
+class Board; //le .h a juste besoin de savoir que le plateau existe mais pas besoin des méthodes
 
 class Piece {
 protected:

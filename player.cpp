@@ -1,9 +1,9 @@
 #include "player.h"
-#include "plateau.h"
+#include "board.h"
 #include "piece.h"
 #include <iostream>
 
-Player::Player(Plateau& p, int col){
+Player::Player(Board& p, int col){
     J2=this;
     petit_roque=true;
     grand_roque=true;
@@ -61,7 +61,7 @@ bool Player::get_check(){return check;}
 bool Player::get_checkmate(){return checkmate;}
 bool Player::get_petit_roque(){return petit_roque;}
 bool Player::get_grand_roque(){return grand_roque;}
-Plateau* Player::get_board(){return ptr_b;}
+Board* Player::get_board(){return ptr_b;}
 void Player::set_other_player(Player* J){J2=J;}
 
 Piece* Player::get_my_king(){

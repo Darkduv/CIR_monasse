@@ -3,7 +3,7 @@ using namespace std;
 #include "case.h"
 #include "player.h"
 #include "piece.h"
-#include "plateau.h"
+#include "board.h"
 #include "graphics.h"
 #include "player.h"
 
@@ -15,7 +15,7 @@ int main()
     display_grid_empty();
 
     // initiations
-    Plateau b;
+    Board b;
     Player J1(b,1);
     Player J2(b,0);
     J1.set_other_player(&J2);
