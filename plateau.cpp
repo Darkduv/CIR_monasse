@@ -47,7 +47,7 @@ Plateau::~Plateau(){
     delete [] plateau;
 }
 
-void Plateau::set_joueur(Joueur* Jo1, Joueur* Jo2){
+void Plateau::set_player(Player* Jo1, Player* Jo2){
     J1=Jo1;
     J2=Jo2;
 }
@@ -68,8 +68,8 @@ void Plateau::set(Piece* p, Case c){
 }
 
 bool Plateau::bouge(Piece* p, Case c, int i){
-    Joueur* J_moving = nullptr;
-    Joueur* J_waiting = nullptr;
+    Player* J_moving = nullptr;
+    Player* J_waiting = nullptr;
     switch (p->get_color()) { //J1 est de couleur 1
     case 0:
         J_moving = J2;
@@ -185,8 +185,8 @@ bool Plateau::bouge(Piece* p, Case c, int i){
 
 // TODO : à compléter (echec)
 int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de bouger en connaissant le plateau, string pour indiquer quel piece bouge
-    Joueur* J_moving = nullptr;
-    Joueur* J_waiting = nullptr;
+    Player* J_moving = nullptr;
+    Player* J_waiting = nullptr;
     switch (p->get_color()) { //J1 est de couleur 1
     case 0:
         J_moving = J2;

@@ -4,8 +4,8 @@ class Piece;
 class Plateau;
 class Case;
 
-class Joueur {
-    Joueur* J2;
+class Player {
+    Player* J2;
     int color;
     Piece** boite;
     Plateau* ptr_b;
@@ -13,7 +13,7 @@ class Joueur {
     bool checkmate;
     bool petit_roque, grand_roque;
 public:
-    Joueur (Plateau& p, int col);
+    Player (Plateau& p, int col);
     void affiche() const;
     void kill_piece(Piece* p);
     void set_piece(Piece* p);
@@ -28,8 +28,8 @@ public:
     bool get_grand_roque();
     Piece* can_eat_me(Case c, Piece* ghosted=nullptr);
     bool is_checkmate();
-    void set_other_player(Joueur* J2);
+    void set_other_player(Player* J2);
     void set_petit_roque(bool value);
     void set_grand_roque(bool value);
-    ~Joueur();
+    ~Player();
 };

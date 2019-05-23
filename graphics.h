@@ -5,7 +5,7 @@
 #include "piece.h"
 #include "plateau.h"
 #include "case.h"
-#include "joueur.h"
+#include "player.h"
 using namespace Imagine;
 
 // Constants for display, adjusted for a classic laptop screen (15')
@@ -32,7 +32,7 @@ void clear_and_display(const Piece* p, const Case c);
 void go_to(const Case c1, const Case c2, const Piece* p);
 void display_board(const Plateau& p);
 
-bool click_move(Joueur& J,Case& c_start, Case& c_end);
+bool click_move(Player& J,Case& c_start, Case& c_end);
 
 // Promotion
 int which_promotion(const Case c);

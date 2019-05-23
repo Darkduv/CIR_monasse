@@ -1,9 +1,9 @@
-#include "joueur.h"
+#include "player.h"
 #include "plateau.h"
 #include "piece.h"
 #include <iostream>
 
-Joueur::Joueur(Plateau& p, int col){
+Player::Player(Plateau& p, int col){
     J2=this;
     petit_roque=true;
     grand_roque=true;
@@ -24,11 +24,11 @@ Joueur::Joueur(Plateau& p, int col){
     }
 
 }
-Joueur::~Joueur(){
+Player::~Player(){
     delete [] boite;
 }
 
-void Joueur::affiche() const{
+void Player::affiche() const{
     std::string colstr[2] = {"NOIR", "BLANC"};
     std::cout << "Couleur du joueur "+colstr[color]  << std::endl;
 
@@ -38,7 +38,7 @@ void Joueur::affiche() const{
     }
 }
 
-void Joueur::kill_piece(Piece* p){
+void Player::kill_piece(Piece* p){
     for(int i=0;i<8*2;i++){
         if (boite[i]==p){
             std::cout<<"travail terminé"<< std::endl;
@@ -46,36 +46,36 @@ void Joueur::kill_piece(Piece* p){
     }
 }
 
-void Joueur::set_piece(Piece* p){
+void Player::set_piece(Piece* p){
     for(int i=0;i<8*2;i++){
         if (boite[i]==nullptr){
             std::cout<<"travail terminé"<< std::endl;
             boite[i]=p;}
     }
 }
-void Joueur::set_petit_roque(bool value){petit_roque=value;}
-void Joueur::set_grand_roque(bool value){grand_roque=value;}
-int Joueur::get_color() const{return color;}
-Piece** Joueur::get_boite(){return boite;}
-bool Joueur::get_check(){return check;}
-bool Joueur::get_checkmate(){return checkmate;}
-bool Joueur::get_petit_roque(){return petit_roque;}
-bool Joueur::get_grand_roque(){return grand_roque;}
-Plateau* Joueur::get_board(){return ptr_b;}
-void Joueur::set_other_player(Joueur* J){J2=J;}
+void Player::set_petit_roque(bool value){petit_roque=value;}
+void Player::set_grand_roque(bool value){grand_roque=value;}
+int Player::get_color() const{return color;}
+Piece** Player::get_boite(){return boite;}
+bool Player::get_check(){return check;}
+bool Player::get_checkmate(){return checkmate;}
+bool Player::get_petit_roque(){return petit_roque;}
+bool Player::get_grand_roque(){return grand_roque;}
+Plateau* Player::get_board(){return ptr_b;}
+void Player::set_other_player(Player* J){J2=J;}
 
-Piece* Joueur::get_my_king(){
+Piece* Player::get_my_king(){
     for(int i=0;i<8*2;i++){
         if(boite[i]!=nullptr && boite[i]->get_name()=="roi") return boite[i];
     }
     return nullptr;
 }
 
-bool Joueur::is_checkmate(){ // not iplemented yet
+bool Player::is_checkmate(){ // not iplemented yet
     return false;
 };
 
-bool Joueur::bouge(Piece* p, Case c){
+bool Player::bouge(Piece* p, Case c){
     if (p!=nullptr && p->get_color()==get_color()){
         Piece* eater = can_eat_me(get_my_king()->get());
         if (eater != nullptr){
@@ -228,7 +228,7 @@ bool Joueur::bouge(Piece* p, Case c){ // vérifie si la couleur de la pièce est
 }*/
 
 
-Piece* Joueur::can_eat_me(Case c, Piece* ghosted){ // permet de retirer une pièce p au test => echecs à découvert
+Piece* Player::can_eat_me(Case c, Piece* ghosted){ // permet de retirer une pièce p au test => echecs à découvert
     // Ghosted est polymorphe xD
     /* il peut servir pour 'oublier' une pièce adverse qui ne peut donc plus nous manger
       OU bien il peut servir pour "oublier" une de nos pièces, pour tester si on ne "découvre pas un échec"

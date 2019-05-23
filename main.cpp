@@ -1,26 +1,32 @@
 #include <iostream>
 using namespace std;
 #include "case.h"
-#include "joueur.h"
+#include "player.h"
 #include "piece.h"
 #include "plateau.h"
 #include "graphics.h"
-#include "joueur.h"
+#include "player.h"
 
 int main()
 {
-    display_grid_empty();
+    // we load the pieces images in memory
     load_all_pieces();
+    // Display of the borad
+    display_grid_empty();
+
+    // initiations
     Plateau b;
-    Joueur J1(b,1);
-    Joueur J2(b,0);
+    Player J1(b,1);
+    Player J2(b,0);
     J1.set_other_player(&J2);
     J2.set_other_player(&J1);
-    b.set_joueur(&J1,&J2);
+    b.set_player(&J1,&J2);
     display_board(b);
+
+    //
     Case c1, c2;
     int tour=0;
-    // il faut changer la fonciton permission mange pour pouvoir l'appeler sur uen case vide pour simuler la présence de la piece sans la déplacer
+    // il faut changer la fonction permission mange pour pouvoir l'appeler sur uen case vide pour simuler la présence de la piece sans la déplacer
     while(!J1.get_checkmate() && !J2.get_checkmate()){
         if (tour%2==0){
 

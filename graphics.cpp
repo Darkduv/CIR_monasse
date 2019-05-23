@@ -121,7 +121,7 @@ void display_board(const Plateau& p){
     }
 }
 
-bool click_move(Joueur& J, Case& c_start, Case& c_end){
+bool click_move(Player& J, Case& c_start, Case& c_end){
     int x, y;
     int count = 0;
     while (count < 2 && getMouse(x, y) != 3){  // right click = 3 = No more moves, I wanna stop
