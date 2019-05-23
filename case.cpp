@@ -18,7 +18,7 @@ int Case::distance(const Case c_prime) const{
     return std::max(abs(c_prime.x - x), abs(c_prime.y -y));
 }
 
-int Case::get(int a) const{
+int Case::get(const int a) const{
     switch (a) {
     case 0:
         return x;

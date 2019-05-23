@@ -11,7 +11,7 @@ public:
     void set(int i, int j){x=i;y=j;}
     void set(char a, int k){x=int(a)-65;y=k-1;}
 
-    int get(int a) const;
+    int get(const int a) const;
     int distance(const Case cprime) const;
     Case operator+(const Case c1) const ;
     bool operator==(const Case c1) const;

@@ -1,5 +1,4 @@
 #include "graphics.h"
-#include "case.h"
 using namespace std;
 #include <string.h>
 
@@ -96,11 +95,29 @@ void clr_case(const Case c){
     coord(c, x, y);
     fillRect(x, y, SPACE, SPACE, color_case(c));
 }
+
+void clear_and_display(const Piece* p, const Case c){
+    clr_case(c);
+    display_piece(p, c);
+}
+
 void go_to(const Case c1, const Case c2, const Piece* p){
     clr_case(c1);
     clr_case(c2);
     display_piece(p, c2);
 }
+
+void display_board(const Plateau& p){
+    for (int j=0;j<8;j++){
+        for (int i=0;i<8;i++){
+            Piece* pp = p.get(i, j);
+            if (pp != nullptr){
+                display_piece(pp, Case(i, j));
+            }
+        }
+    }
+}
+
 bool click_move(Joueur& J, Case& c_start, Case& c_end){
     int x, y;
     int count = 0;
@@ -122,16 +139,7 @@ bool click_move(Joueur& J, Case& c_start, Case& c_end){
     }
     return count == 2;
 }
-void display_board(const Plateau& p){
-    for (int j=0;j<8;j++){
-        for (int i=0;i<8;i++){
-            Piece* pp = p.get(i, j);
-            if (pp != nullptr){
-                display_piece(pp, Case(i, j));
-            }
-        }
-    }
-}
+
 
 // Promotion choice.
 
