@@ -16,5 +16,5 @@ public:
     Case operator+(const Case c1) const ;
     bool operator==(const Case c1) const;
 };
-typedef Case Deplacement; // it's the same type, but it makes the code easier to understand
-Deplacement d_deplacement(const Case c_start, const Case c_end);
+typedef Case Move; // it's the same type, but it makes the code easier to understand
+Move d_move(const Case c_start, const Case c_end);

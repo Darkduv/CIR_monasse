@@ -10,7 +10,7 @@ protected:
     Case c;
     static std::string const name;
 public:
-    virtual bool permission_bouge(Case c) const {return false;} // il faut la définir
+    virtual bool permission_bouge(Case c) const{return false;} // il faut la définir
     virtual std::string get_name() const;
     virtual void bouge(Case c);
     int get_color() const {return couleur;}

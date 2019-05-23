@@ -91,17 +91,20 @@ void display_piece(const Piece* p, const Case c){
 }
 
 void clr_case(const Case c){
+    // "remove" the piece on the case if there is one.
     int x, y;
     coord(c, x, y);
     fillRect(x, y, SPACE, SPACE, color_case(c));
 }
 
 void clear_and_display(const Piece* p, const Case c){
+    // Clears before displays the Piece p on Case c.
     clr_case(c);
     display_piece(p, c);
 }
 
 void go_to(const Case c1, const Case c2, const Piece* p){
+    // Moves p from c1 to c2.
     clr_case(c1);
     clr_case(c2);
     display_piece(p, c2);
@@ -144,6 +147,7 @@ bool click_move(Joueur& J, Case& c_start, Case& c_end){
 // Promotion choice.
 
 void display_promotion(Case c, int col){
+    // Display choices for promotion
     int x, y;
     coord(c, x, y);
     clr_case(c);
@@ -155,6 +159,7 @@ void display_promotion(Case c, int col){
 }
 
 int which_promotion(Case c){
+    // get which piece wants the player
     int x, y;
     int i, j;
     do {

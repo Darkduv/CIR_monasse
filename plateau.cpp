@@ -213,7 +213,7 @@ int Plateau::permission_bouge(Piece* p, Case c){ // on teste les permissions de 
     }
 
     // on teste si il y a des pièces sur le trajet
-    Deplacement dc = d_deplacement(p->get(), c);
+    Move dc = d_move(p->get(), c);
     Case c_test = p->get();
     int dx = c.get(0) - c_test.get(0);
     int dy = c.get(1) - c_test.get(1);
@@ -283,7 +283,7 @@ bool Plateau::permission_mange(Piece *p, Case c, Piece* ghosted){
         return std::abs(cp.get(0)-c.get(0)) == 1 && cp.get(1)+dy == c.get(1);
     }
     else {
-        Deplacement dc = d_deplacement(p->get(), c);
+        Move dc = d_move(p->get(), c);
         Case c_test = p->get();
         int dx = c.get(0) - c_test.get(0);
         int dy = c.get(1) - c_test.get(1);
