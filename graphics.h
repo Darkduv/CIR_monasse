@@ -2,10 +2,12 @@
 #include <Imagine/Graphics.h>
 #include <Imagine/Images.h>
 #include <map>
-#include "piece.h"
-#include "board.h"
-#include "case.h"
-#include "player.h"
+
+class Case;
+class Board;
+class Piece;
+class Player;
+
 using namespace Imagine;
 
 // Constants for display, adjusted for a classic laptop screen (15')

@@ -297,7 +297,7 @@ bool Board::permission_mange(Piece *p, Case c, Piece* ghosted){
 }
 
 void Board::affiche() const{
-    std::cout << "DEBUT AFFICHE PLATEAU" << std::endl;
+    std::cout << "____________________________" << std::endl;
     for(int j=7;j>=0;j--){
         for(int i=0;i<8;i++){
             if(get(Case(i,j))!=nullptr)
@@ -307,5 +307,5 @@ void Board::affiche() const{
         }
         std::cout<<std::endl;
     }
-    std::cout <<"FIN AFFICHE PLATEAU" << std::endl;
+    std::cout <<"_____________________________" << std::endl;
 }

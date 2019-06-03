@@ -2,6 +2,10 @@
 using namespace std;
 #include <string.h>
 
+#include "piece.h"
+#include "board.h"
+#include "player.h"
+
 /**************************
  * byte* pieces functions *
  *************************/
