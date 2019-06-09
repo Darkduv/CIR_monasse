@@ -25,7 +25,7 @@ void coord(const Case c, int&x, int&y);
 
 // init graphics
 void load_all_pieces();
-void display_grid_empty();
+Window display_grid_empty();
 
 // Tools box
 void display_piece(const Piece* p, const Case c);

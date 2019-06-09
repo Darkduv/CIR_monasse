@@ -41,7 +41,6 @@ void Player::affiche() const{
 void Player::kill_piece(Piece* p){
     for(int i=0;i<8*2;i++){
         if (boite[i]==p){
-            std::cout<<"travail terminé"<< std::endl;
             boite[i]=nullptr;}
     }
 }
@@ -79,7 +78,6 @@ bool Player::bouge(Piece* p, Case c){
     if (p!=nullptr && p->get_color()==get_color()){
         Piece* eater = can_eat_me(get_my_king()->get());
         if (eater != nullptr){
-            std::cout<<"attention, le roi est en echec" << std::endl;
             if (p->get_name()=="roi"){
                 ptr_b->set(nullptr, p->get());
                 if (can_eat_me(c) == nullptr){
@@ -129,8 +127,6 @@ bool Player::bouge(Piece* p, Case c){
             else return false;
         }
         else {
-            std::cout << "toto" << std::endl;
-            std::cout << can_eat_me(get_my_king()->get(), p) << std::endl;
             if (!can_eat_me(get_my_king()->get(), p)){
                 return ptr_b->bouge(p,c);
             }
@@ -143,91 +139,6 @@ bool Player::bouge(Piece* p, Case c){
         return false;
 }
 
-/*
-bool Joueur::bouge(Piece* p, Case c){ // vérifie si la couleur de la pièce est identique à celle du joueur avant de bouger
-    if (p!=nullptr && p->get_color()==get_color()){
-        Piece* myking = get_my_king();
-        int droit_bouge;
-        check = can_eat_me(myking->get());
-        if (check){
-            std::cout << "attention echec !" << std::endl;
-            droit_bouge=ptr_b->permission_bouge(p,c);
-            Case old_case;
-            switch (droit_bouge) {
-            case 0: // on a pas le droit de bouger donc retourne faux
-                return false;
-            case 1: // on a le droit de bouger sur c sans prendre aucune pièce => on regarde si on peut bloquer l'echec
-                old_case = p->get();
-                p->bouge(c);
-                ptr_b->set(p,c);
-                if (can_eat_me(get_my_king()->get())){ // on est oblité de rappeler get_my_king pck on a peut être bougé le roi
-                    p->bouge(old_case);
-                    ptr_b->set(p,old_case);
-                    return false;
-                }
-                else {
-                    p->bouge(old_case);
-                    ptr_b->set(p,old_case);
-                    return ptr_b->bouge(p,c,droit_bouge);
-                }
-            case 2: // on a le droit de bouger sur c en prenant une pièce => on regarde si en ayant pris la pièce on est tjrs en echec
-                if (can_eat_me(get_my_king()->get(),ptr_b->get(c))) return false;
-                else {
-                    J2->kill_piece(ptr_b->get(c));
-                    return ptr_b->bouge(p,c,droit_bouge);
-                }
-            }
-            return false;
-        }
-        else if (p->get_name()=="roi"){ // je bouge le roi et on ne peut pas me manger
-            std::cout << "je bouge le roi" << std::endl;
-
-            if  (!can_eat_me(c)) return ptr_b->bouge(p,c);
-            else return false;
-        }
-        else {
-            droit_bouge=ptr_b->permission_bouge(p,c);
-            Case old_case;
-            switch (droit_bouge) {
-            case 0:
-                return false;
-            case 1:
-                old_case = p->get();
-                p->bouge(c);
-                ptr_b->set(p,c);
-                if (can_eat_me(myking->get())){
-                    p->bouge(old_case);
-                    ptr_b->set(p,old_case);
-                    return false;
-                }
-                else {
-                    p->bouge(old_case);
-                    ptr_b->set(p,old_case);
-                    return ptr_b->bouge(p,c,droit_bouge);
-                }
-            case 2:
-                std::cout << "attention on prend un pion" << std::endl;
-                if (can_eat_me(myking->get(),ptr_b->get(c))) return false;
-                else {
-                    J2->kill_piece(ptr_b->get(c));
-                    return ptr_b->bouge(p,c,droit_bouge);
-                }
-            case 3:
-                if (ptr_b->get(c+Case(0,1)) != nullptr && ptr_b->get(c+Case(0,1))->get_name()=="pion")
-                    J2->kill_piece(ptr_b->get(c+Case(0,1)));
-                else J2->kill_piece(ptr_b->get(c+Case(0,-1)));
-                return ptr_b->bouge(p,c);
-
-            default:
-                return ptr_b->bouge(p,c);
-            }
-            return ptr_b->bouge(p,c);
-        }
-    }
-    return false;
-}*/
-
-
 Piece* Player::can_eat_me(Case c, Piece* ghosted){ // permet de retirer une pièce p au test => echecs à découvert
     // Ghosted est polymorphe xD
     /* il peut servir pour 'oublier' une pièce adverse qui ne peut donc plus nous manger
@@ -235,7 +146,6 @@ Piece* Player::can_eat_me(Case c, Piece* ghosted){ // permet de retirer une piè
       en la bougeant, i.e. notre pièce est clouée.
     */
     Piece** ptr_boite = J2->get_boite();
-    J2->affiche();
     for (int i=0;i<8*2;i++) {
         if (ptr_boite[i]!=nullptr &&ptr_boite[i]!=ghosted && ptr_b->permission_mange(ptr_boite[i],c, ghosted)){
             std::cout << "A piece of the following type can eat me : " << ptr_boite[i]->get_name() << " and is on the case("<<ptr_boite[i]->get().get(0)<<","<<ptr_boite[i]->get().get(1)<<")"<< std::endl;

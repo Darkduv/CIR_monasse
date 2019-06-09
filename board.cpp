@@ -83,7 +83,6 @@ bool Board::bouge(Piece* p, Case c, int i){
     bool petit_roque = J_moving->get_petit_roque();
     bool grand_roque = J_moving->get_grand_roque();
     if (i==-1) i = permission_bouge(p,c);
-    std::cout << i << std::endl;
     if (i==0){
         return false;
     }
@@ -102,7 +101,6 @@ bool Board::bouge(Piece* p, Case c, int i){
     else if (i==7 || i==8){ // petit ou grand roque, on "pré-bouge" la tour
         int row = c.get(1)+1;
         Case case_tour, new_case_tour;
-        std::cout << "hey" << std::endl;
         if (i==7) {
             case_tour.set('H', row);
             new_case_tour.set('F', row);
@@ -231,13 +229,13 @@ int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bo
     if (p->get_name() == "roi"){
         if (std::abs(dx)==2 && (dy != 0 || (!petit_roque && !grand_roque))) return false;
         if (dx == 2 && petit_roque){
-            std::cout << "yolo" << std::endl;
-            std::cout << get(p->get()+dc) << std::endl;
-            if (get(p->get()+dc) != nullptr) return 0;
+            if (get(p->get()+dc) != nullptr ||J_moving->can_eat_me(p->get()) || J_moving->can_eat_me(p->get()+dc)) return 0;
             else return 7;
         }
         else if (dx == -2 && grand_roque){
-            if (get(p->get()+dc) != nullptr || get(p->get()+dc+dc) != nullptr) return 0; // le chemin doit être libre
+            if (get(p->get()+dc) != nullptr || get(p->get()+dc+dc) != nullptr
+                    || J_moving->can_eat_me(p->get()+dc) || J_moving->can_eat_me(p->get()+dc+dc)
+                    || J_moving->can_eat_me(p->get())) return 0; // le chemin doit être libre
             else return 8;
         }
         else if (std::abs(dx)==2) return 0;
@@ -274,12 +272,10 @@ bool Board::permission_mange(Piece *p, Case c, Piece* ghosted){
         return p->permission_bouge(c); // si je suis un cavalier, on cherche juste à voir si la case est accessible
     }
     else if (p->get_name()=="pion"){
-        std::cout << "yyolo cooucou" << std::endl;
         Case cp = p->get();
         int dy = 1; // a white (col=1) pawn can only go up
         if (p->get_color()==0)
             dy = -1; // a black (col=0) pawn can only go down
-        std::cout << dy << " " << cp.get(0) << " " << cp.get(1) << " "<< c.get(0) << " " << c.get(1) << std::endl;
         return std::abs(cp.get(0)-c.get(0)) == 1 && cp.get(1)+dy == c.get(1);
     }
     else {

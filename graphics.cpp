@@ -62,10 +62,10 @@ Color color_case(const Case c){
  * graphic functions *
  ********************/
 
-void display_grid_empty(){
+Window display_grid_empty(){
     int W = (8)*(SPACE)+2*MARGIN;
     int H = (8)*SPACE+2*MARGIN;
-    openWindow(W, H, "Chessboard");
+    Window window = openWindow(W, H, "Chessboard");
     const string columns = "ABCDEFGH";
     const string rows = "87654321";
     const int dx = 2*FONT_SIZE/7;
@@ -85,6 +85,7 @@ void display_grid_empty(){
             clr_case(Case(int(i), j));
         }
     }
+    return window;
 }
 
 void display_piece(const Piece* p, const Case c){
@@ -128,7 +129,8 @@ void display_board(const Board& p){
 bool click_move(Player& J, Case& c_start, Case& c_end){
     int x, y;
     int count = 0;
-    while (count < 2 && getMouse(x, y) != 3){  // right click = 3 = No more moves, I wanna stop
+
+    while (count < 2 && getMouse(x, y) != 3 ) {  // right click = 3 = No more moves, I wanna stop
         count++;
         int i = (x-MARGIN)/SPACE;
         int j = 7-(y-MARGIN)/SPACE;
@@ -140,11 +142,14 @@ bool click_move(Player& J, Case& c_start, Case& c_end){
             }
         }
         else if (count==2) {
-            //cout << "Got ending Case" << endl;
             c_end.set(i, j);
         }
     }
-    return count == 2;
+    if (count != 2){
+        std::cout << "You asked to quit. We're trying to satisfy your request" << std::endl;
+    }
+    return count == 2; // check if we get the move normally or something else
+    // (that is : right click) made the function to end.
 }
 
 
