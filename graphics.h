@@ -16,9 +16,9 @@ const int FONT_SIZE = 30;
 const int MARGIN = 50;
 
 // For colors
-const AlphaColor LIGHTGREEN=AlphaColor(119, 149, 89, 255);
+const AlphaColor LIGHT_GREEN=AlphaColor(119, 149, 89, 255);
 const AlphaColor IVORY=AlphaColor(238, 238, 211, 255);
-const AlphaColor BOARD_COLORS[2] = {LIGHTGREEN, IVORY};
+const AlphaColor BOARD_COLORS[2] = {LIGHT_GREEN, IVORY};
 
 // Tools
 void coord(const Case c, int&x, int&y);

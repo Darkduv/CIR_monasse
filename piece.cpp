@@ -35,7 +35,7 @@ Pion::Pion(Case c, int couleur) : Piece(c,couleur){}
  * Constructeurs de Piece *
  *************************/
 
-Piece::Piece(){}
+Piece::Piece()=default;
 Piece::Piece(Case case_depart, int col){
     couleur = col;
     c = case_depart;
@@ -45,19 +45,19 @@ Piece::Piece(Case case_depart, int col){
  ******************    bouge     ********************
  ***************************************************/
 
-void Piece::bouge(Case case_arrivee){
+void Piece::move(Case case_arrivee){
     c=case_arrivee;
 }
 
-void Pion::bouge(Case case_arrivee){
+void Pion::move(Case case_arrivee){
     c=case_arrivee;
 }
 
-void Roi::bouge(Case case_arrivee){
+void Roi::move(Case case_arrivee){
     c=case_arrivee;
 }
 
-void Tour::bouge(Case case_arrivee){
+void Tour::move(Case case_arrivee){
     c=case_arrivee;
 }
 
@@ -68,28 +68,23 @@ void Tour::bouge(Case case_arrivee){
 // Gestion des déplacements possibles
 
 bool Roi::permission_bouge(Case case_arrive) const {
-    if (case_arrive.distance(c)<=1) return true;
-    else return false;
+    return case_arrive.distance(c) <= 1;
 }
 
 bool Dame::permission_bouge(Case case_arrive) const { // déplacement du fou OU de la tour
-    if ((case_arrive.get(0) == c.get(0) || case_arrive.get(1) == c.get(1)) || (abs(case_arrive.get(0)-c.get(0))== abs(case_arrive.get(1)-c.get(1)))) return true;
-    else return false;
+    return (case_arrive.get(0) == c.get(0) || case_arrive.get(1) == c.get(1)) || (abs(case_arrive.get(0) - c.get(0)) == abs(case_arrive.get(1) - c.get(1)));
 }
 
 bool Cavalier::permission_bouge(Case case_arrive) const {
-    if (abs(case_arrive.get(0)-c.get(0))*abs(case_arrive.get(1)-c.get(1))==2) return true;
-    else return false;
+    return abs(case_arrive.get(0) - c.get(0)) * abs(case_arrive.get(1) - c.get(1)) == 2;
 }
 
 bool Fou::permission_bouge(Case case_arrive) const {
-    if (abs(case_arrive.get(0)-c.get(0)) == abs(case_arrive.get(1)-c.get(1))) return true;
-    else return false;
+    return abs(case_arrive.get(0) - c.get(0)) == abs(case_arrive.get(1) - c.get(1));
 }
 
 bool Tour::permission_bouge(Case case_arrive) const {
-    if (case_arrive.get(0) == c.get(0) || case_arrive.get(1) == c.get(1)) return true;
-    else return false;
+    return case_arrive.get(0) == c.get(0) || case_arrive.get(1) == c.get(1);
 }
 
 bool Pion::permission_bouge(Case case_arrive) const { // les noirs=0 en haut les blanc=1 en bas
@@ -98,19 +93,13 @@ bool Pion::permission_bouge(Case case_arrive) const { // les noirs=0 en haut les
         if  (case_arrive.get(1)-c.get(1)==1){
             return true;
         }
-        else if (case_arrive.get(1)-c.get(1)==2 && case_arrive.get(0)==c.get(0)) {
-            return c.get(1)==1; // pion pas encore avancé, on peut l'avancer de 2 case.
-        }
-        else return false;
+        else return case_arrive.get(1) - c.get(1) == 2 && case_arrive.get(0) == c.get(0) && c.get(1) == 1;
     }
     else if (couleur==0){
             if  (case_arrive.get(1)-c.get(1)==-1){
                 return true;
             }
-            else if (case_arrive.get(1)-c.get(1)==-2 && case_arrive.get(0)==c.get(0)) {
-                return c.get(1)==6; // pion pas encore avancé, on peut l'avancer de 2 case.
-            }
-            else return false;
+            else return case_arrive.get(1) - c.get(1) == -2 && case_arrive.get(0) == c.get(0) && c.get(1) == 6;
     }
     else return false; // jamais atteint normalement
 }

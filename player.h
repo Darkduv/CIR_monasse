@@ -7,7 +7,7 @@ class Case;
 class Player {
     Player* J2;
     int color;
-    Piece** boite;
+    Piece** box;
     Board* ptr_b;
     bool check;
     bool checkmate;

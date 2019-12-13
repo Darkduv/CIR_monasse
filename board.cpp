@@ -98,7 +98,7 @@ bool Board::bouge(Piece* p, Case c, int i){
         Case est_pris_en_passant(c.get(0), p->get().get(1));
         clr_case(est_pris_en_passant);
     }
-    else if (i==7 || i==8){ // petit ou grand roque, on "pré-bouge" la tour
+    else if (i==7 || i==8){ // petit ou grand roque, on "pré-move" la tour
         int row = c.get(1)+1;
         Case case_tour, new_case_tour;
         if (i==7) {
@@ -113,7 +113,7 @@ bool Board::bouge(Piece* p, Case c, int i){
         go_to(case_tour, new_case_tour, tour);
         set(tour, new_case_tour);
         set(nullptr, case_tour);
-        tour->bouge(new_case_tour);
+        tour->move(new_case_tour);
     }
     if (i==6){
         peut_etre_pris_en_passant = p;
@@ -143,7 +143,7 @@ bool Board::bouge(Piece* p, Case c, int i){
         J_moving->kill_piece(p);
         delete p; // on supprime le pion en libérant la mémoire
         if (i==5) {
-            J_waiting->kill_piece(get(c)); // on supprime de la boite la pièce prise
+            J_waiting->kill_piece(get(c)); // on supprime de la box la pièce prise
         }
         switch(promoted){ // on recréer la pièce
         case 0:
@@ -159,17 +159,17 @@ bool Board::bouge(Piece* p, Case c, int i){
             p = new Tour(position_p, col_joueur);
             break;
         }
-        J_moving->set_piece(p); // on ajoute à la boite a pièce
+        J_moving->set_piece(p); // on ajoute à la box a pièce
     }
     go_to(p->get(),c,p);
     set(p,c);
     set(nullptr,p->get());
-    p->bouge(c);
+    p->move(c);
     return true;
 
 }
 
-/* Permissions bouge :
+/* Permissions move :
  *  - 0 = Non
  *  - 1 = Oui, case Libre, coup classique
  *  - 2 = Oui, prise de piece
@@ -182,7 +182,7 @@ bool Board::bouge(Piece* p, Case c, int i){
 
 
 // TODO : à compléter (echec)
-int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bouger en connaissant le plateau, string pour indiquer quel piece bouge
+int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bouger en connaissant le plateau, string pour indiquer quel piece move
     Player* J_moving = nullptr;
     Player* J_waiting = nullptr;
     switch (p->get_color()) { //J1 est de couleur 1

@@ -12,7 +12,7 @@ protected:
 public:
     virtual bool permission_bouge(Case c) const{return false;} // il faut la définir
     virtual std::string get_name() const;
-    virtual void bouge(Case c);
+    virtual void move(Case c);
     int get_color() const {return couleur;}
     Case get(){return c;}
     Piece(Case c, int couleur);
@@ -25,7 +25,7 @@ class Roi : public Piece {
 
 public:
     Roi(Case c, int couleur);
-    virtual void bouge(Case c);
+    virtual void move(Case c);
     virtual std::string get_name() const;
     virtual bool permission_bouge(Case c) const;
 };
@@ -59,7 +59,7 @@ class Tour : public Piece {
     static std::string const name;
 public:
     Tour(Case c, int couleur);
-    virtual void bouge(Case c);
+    virtual void move(Case c);
     virtual std::string get_name() const;
     virtual bool permission_bouge(Case c) const;
 };
@@ -68,7 +68,7 @@ class Pion : public Piece {
     static std::string const name;
 public:
     Pion(Case c, int couleur);
-    virtual void bouge(Case c);
+    virtual void move(Case c);
     virtual std::string get_name() const;
     virtual bool permission_bouge(Case c) const;
 };

@@ -11,13 +11,13 @@ Player::Player(Board& p, int col){
     checkmate=false;
     ptr_b=&p;
     color = col;
-    boite = new Piece*[8*2];
+    box = new Piece*[8*2];
     int k=0;
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
             Piece* piece_parcourue = p[Case(i,j)];
             if (piece_parcourue!=nullptr && piece_parcourue->get_color()==col){
-                boite[k]=piece_parcourue;
+                box[k]=piece_parcourue;
                 ++k;
             }
         }
@@ -25,7 +25,7 @@ Player::Player(Board& p, int col){
 
 }
 Player::~Player(){
-    delete [] boite;
+    delete [] box;
 }
 
 void Player::affiche() const{
@@ -33,29 +33,29 @@ void Player::affiche() const{
     std::cout << "Couleur du joueur "+colstr[color]  << std::endl;
 
     for(int i=0;i<8*2;i++){
-        if (boite[i]==nullptr) std::cout << "attention nul" << std::endl;
-        else std::cout << boite[i]->get_name() << " : " << boite[i]->get().get(0) << boite[i]->get().get(1) << std::endl;
+        if (box[i]==nullptr) std::cout << "attention nul" << std::endl;
+        else std::cout << box[i]->get_name() << " : " << box[i]->get().get(0) << box[i]->get().get(1) << std::endl;
     }
 }
 
 void Player::kill_piece(Piece* p){
     for(int i=0;i<8*2;i++){
-        if (boite[i]==p){
-            boite[i]=nullptr;}
+        if (box[i]==p){
+            box[i]=nullptr;}
     }
 }
 
 void Player::set_piece(Piece* p){
     for(int i=0;i<8*2;i++){
-        if (boite[i]==nullptr){
+        if (box[i]==nullptr){
             std::cout<<"travail terminé"<< std::endl;
-            boite[i]=p;}
+            box[i]=p;}
     }
 }
 void Player::set_petit_roque(bool value){petit_roque=value;}
 void Player::set_grand_roque(bool value){grand_roque=value;}
 int Player::get_color() const{return color;}
-Piece** Player::get_boite(){return boite;}
+Piece** Player::get_boite(){return box;}
 bool Player::get_check(){return check;}
 bool Player::get_checkmate(){return checkmate;}
 bool Player::get_petit_roque(){return petit_roque;}
@@ -65,7 +65,7 @@ void Player::set_other_player(Player* J){J2=J;}
 
 Piece* Player::get_my_king(){
     for(int i=0;i<8*2;i++){
-        if(boite[i]!=nullptr && boite[i]->get_name()=="roi") return boite[i];
+        if(box[i]!=nullptr && box[i]->get_name()=="roi") return box[i];
     }
     return nullptr;
 }

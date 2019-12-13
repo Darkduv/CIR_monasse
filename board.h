@@ -14,7 +14,7 @@ public:
     Board();
     ~Board();
     void affiche() const;
-    bool bouge(Piece* p, Case c,int i = -1); // bouge une piece
+    bool bouge(Piece* p, Case c,int i = -1); // move une piece
     int permission_bouge(Piece* p, Case c);
     bool permission_mange(Piece* p, Case c, Piece* ghosted=nullptr);
     Piece* get(Case c) const; // accesseur du plateau
