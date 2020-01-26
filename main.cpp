@@ -2,10 +2,9 @@
 using namespace std;
 #include "case.h"
 #include "player.h"
-#include "piece.h"
+// #include "piece.h"
 #include "board.h"
 #include "graphics.h"
-#include "player.h"
 
 int main()
 {
@@ -23,8 +22,9 @@ int main()
 
     // we load the pieces images in memory
     load_all_pieces();
-    // Display of the borad
+    // Display of the board
     Window window_game = display_grid_empty();
+    // TODO: What's that doing here ?
 
     // initiations
     Board b;
