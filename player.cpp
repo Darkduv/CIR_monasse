@@ -28,7 +28,7 @@ Player::~Player(){
     delete [] box;
 }
 
-void Player::affiche() const{
+void Player::prompt() const{
     std::string colstr[2] = {"NOIR", "BLANC"};
     std::cout << "Couleur du joueur "+colstr[color]  << std::endl;
 

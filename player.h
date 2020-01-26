@@ -14,7 +14,7 @@ class Player {
     bool petit_roque, grand_roque;
 public:
     Player (Board& p, int col);
-    void affiche() const;
+    void prompt() const;
     void kill_piece(Piece* p);
     void set_piece(Piece* p);
     bool bouge(Piece* p,Case c);
