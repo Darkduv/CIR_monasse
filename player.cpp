@@ -70,7 +70,7 @@ Piece* Player::get_my_king(){
     return nullptr;
 }
 
-bool Player::is_checkmate(){ // not iplemented yet
+bool Player::is_checkmate(){ // not implemented yet
     return false;
 };
 
@@ -82,7 +82,7 @@ bool Player::bouge(Piece* p, Case c){
                 ptr_b->set(nullptr, p->get());
                 if (can_eat_me(c) == nullptr){
                     ptr_b->set(p, p->get());
-                    return ptr_b->bouge(p,c); // si on peut echapper a lechec en se déplaçant on le fait
+                    return ptr_b->bouge(p,c); // if the check can be avoided by moving, we doing that
                 }
                 else {
                     ptr_b->set(p, p->get());

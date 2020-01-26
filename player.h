@@ -27,7 +27,7 @@ public:
     bool get_petit_roque();
     bool get_grand_roque();
     Piece* can_eat_me(Case c, Piece* ghosted=nullptr);
-    bool is_checkmate();
+    static bool is_checkmate();
     void set_other_player(Player* J2);
     void set_petit_roque(bool value);
     void set_grand_roque(bool value);
