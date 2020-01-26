@@ -31,9 +31,9 @@ void initializer_map_piece(const string name, const string col){
 void load_all_pieces(){
     const string cols[2] = {"b", "w"};
     const string names[6] = {"roi", "dame", "fou", "cavalier", "tour", "pion"};
-    for (int i=0;i < 2;i++){
-        for (int j=0;j<6;j++){
-            initializer_map_piece(names[j], cols[i]);
+    for (const auto & col : cols){
+        for (const auto & name : names){
+            initializer_map_piece(name, col);
         }
     }
 }
