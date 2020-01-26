@@ -1,8 +1,8 @@
 #pragma once
 
 class Case {
-    int x;
-    int y;
+    int x{};
+    int y{};
 public:
     Case();
     Case(const int i, const int j);
