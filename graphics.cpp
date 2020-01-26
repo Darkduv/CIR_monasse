@@ -1,6 +1,6 @@
 #include "graphics.h"
 using namespace std;
-#include <string.h>
+// #include <string.h>
 
 #include "piece.h"
 #include "board.h"
@@ -12,11 +12,11 @@ using namespace std;
 // to load pieces' images
 static std::map<std::string, AlphaColor*> byte_pieces;
 
-std::string get_path_name(const string name, const string col){
+std::string get_path_name(const string& name, const string& col){
     return stringSrcPath("img/"+to_string(SPACE)+"/"+col+name+".png");
 }
 
-AlphaColor* load_bitmap(const string name, const string col){
+AlphaColor* load_bitmap(const string& name, const string& col){
     AlphaColor* piece;
     const std::string path = get_path_name(name, col);
     int w, h;
@@ -24,7 +24,7 @@ AlphaColor* load_bitmap(const string name, const string col){
     return piece;
 }
 
-void initializer_map_piece(const string name, const string col){
+void initializer_map_piece(const string& name, const string& col){
     byte_pieces[col+name] = load_bitmap(name, col);
 }
 
