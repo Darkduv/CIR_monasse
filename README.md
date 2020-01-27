@@ -1,6 +1,6 @@
 # Chess board
 
-This project is linked to a course of programmation in the school ENPC
+This project is linked to a course of programming in the school ENPC
 
 ## Authors
 
@@ -17,6 +17,6 @@ Due to lack of time, we didn't do an AI, but the board is fully operational and 
 
 ### To Do List
 - [x] Board, moving pieces, checking rules
-- [ ] Gestion of check to correct
+- [ ] Correct management of check, discored check in particular
 - [ ] Online/distance two player
 - [ ] AI
