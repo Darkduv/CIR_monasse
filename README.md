@@ -13,8 +13,10 @@ This project depends on [Imagine](http://imagine.enpc.fr/~monasse/Imagine++/) Li
 
 ## Project
 
-Due to lack of time, we didn't do an AI, but the board is fully operational and allows only the right moves according to Chess rules. 
+Due to lack of time, we didn't do an AI, but the board is fully operational and (nearly) allows only the right moves according to Chess rules. 
+
 ### To Do List
 - [x] Board, moving pieces, checking rules
+- [ ] Gestion of check to correct
 - [ ] Online/distance two player
 - [ ] AI
