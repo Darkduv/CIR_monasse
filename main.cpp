@@ -45,7 +45,7 @@ int main()
 
             cout << "white to move" << endl;
             dont_quit = click_move(J1,c1,c2);
-            while (!(J1.bouge(b.get(c1), c2)) && dont_quit){
+            while (!(J1.move(b.get(c1), c2)) && dont_quit){
                 dont_quit = click_move(J1,c1,c2);
             }
         }
@@ -53,7 +53,7 @@ int main()
 
             cout << "black to move" << endl;
             dont_quit = click_move(J2,c1,c2);
-            while (!(J2.bouge(b.get(c1), c2)) && dont_quit){
+            while (!(J2.move(b.get(c1), c2)) && dont_quit){
                 dont_quit = click_move(J2,c1,c2);
             }
         }

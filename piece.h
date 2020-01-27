@@ -2,73 +2,73 @@
 #include "case.h"
 #include <string>
 
-class Board; //le .h a juste besoin de savoir que le plateau existe mais pas besoin des méthodes
+class Board; // This .h  file need to know Board class exists but do not need its methods
 
 class Piece {
 protected:
-    int couleur; // 0 = noir, 1 = blanc
+    int color; // 0 = black, 1 = white
     Case c;
     static std::string const name;
 public:
-    virtual bool permission_bouge(Case c) const{return false;} // il faut la définir
+    virtual bool permission_move(Case c) const{return false;} // we need to define it (?)
     virtual std::string get_name() const;
-    virtual void move(Case c);
-    int get_color() const {return couleur;}
+    virtual void move(Case end_of_move_case);
+    int get_color() const {return color;}
     Case get(){return c;}
     Piece(Case c, int couleur);
     Piece();
     virtual ~Piece(){}
 };
 
-class Roi : public Piece {
+class King : public Piece {
     static std::string const name;
 
 public:
-    Roi(Case c, int couleur);
+    King(Case c, int color);
     virtual void move(Case c);
     virtual std::string get_name() const;
-    virtual bool permission_bouge(Case c) const;
+    virtual bool permission_move(Case case_arrive) const;
 };
 
-class Dame : public Piece {
+class Queen : public Piece {
     static std::string const name;
 public:
-    Dame(Case c, int couleur);
+    Queen(Case c, int couleur);
     virtual std::string get_name() const;
-    virtual bool permission_bouge(Case c) const;
+    virtual bool permission_move(Case c) const;
 };
 
 
-class Fou : public Piece {
+class Bishop : public Piece {
     static std::string const name;
 public:
-    Fou(Case c, int couleur);
+    Bishop(Case c, int couleur);
     virtual std::string get_name() const;
-    virtual bool permission_bouge(Case c) const;
+    virtual bool permission_move(Case c) const;
 };
 
-class Cavalier : public Piece {
+class Knight : public Piece {
     static std::string const name;
 public:
-    Cavalier(Case c, int couleur);
+    Knight(Case c, int color);
     virtual std::string get_name() const;
-    virtual bool permission_bouge(Case c) const;
+    virtual bool permission_move(Case c) const;
 };
 
-class Tour : public Piece {
+class Tower : public Piece {
     static std::string const name;
 public:
-    Tour(Case c, int couleur);
+    Tower(Case c, int couleur);
     virtual void move(Case c);
     virtual std::string get_name() const;
-    virtual bool permission_bouge(Case c) const;
+    virtual bool permission_move(Case c) const;
 };
 
-class Pion : public Piece {
+class Pawn : public Piece {
     static std::string const name;
 public:
-    Pion(Case c, int couleur);
+    Pawn(Case c, int couleur);
     virtual void move(Case c);
     virtual std::string get_name() const;
-    virtual bool permission_bouge(Case c) const;
+    virtual bool permission_move(Case c) const;
 };
