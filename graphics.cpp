@@ -9,6 +9,7 @@ using namespace std;
 /**************************
  * byte* pieces functions *
  *************************/
+
 // to load pieces' images
 static std::map<std::string, AlphaColor*> byte_pieces;
 
@@ -73,7 +74,7 @@ Window display_grid_empty(){
     const int y1 = MARGIN/2;
     const int y2 = MARGIN/2+MARGIN+8*SPACE;
     for (unsigned int i=0; i < 8;i++){
-        // rows and columns numerotation
+        // rows and columns numerating
         const int x = MARGIN + int(i)*SPACE+SPACE/2;
         drawString(x-dx, y1+dy, string(1, columns[i]), BLACK, FONT_SIZE);
         drawString(x-dx, y2+dy, string(1, columns[i]), BLACK, FONT_SIZE);

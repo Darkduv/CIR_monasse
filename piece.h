@@ -2,15 +2,15 @@
 #include "case.h"
 #include <string>
 
-class Board; //le .h a juste besoin de savoir que le plateau existe mais pas besoin des méthodes
+class Board; // This .h  file need to know Board class exists but do not need its methods
 
 class Piece {
 protected:
-    int couleur; // 0 = noir, 1 = blanc
+    int couleur; // 0 = black, 1 = white
     Case c;
     static std::string const name;
 public:
-    virtual bool permission_bouge(Case c) const{return false;} // il faut la définir
+    virtual bool permission_bouge(Case c) const{return false;} // we need to define it (?)
     virtual std::string get_name() const;
     virtual void move(Case c);
     int get_color() const {return couleur;}

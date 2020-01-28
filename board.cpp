@@ -7,7 +7,7 @@ Board::Board(){
     plateau = new Piece*[8*8];
     J1=nullptr;
     J2=nullptr;
-    // On place les blancs
+    // We create the new white pieces and put it on the board
     set(new Tour(Case('A',1),1),Case('A',1));
     set(new Cavalier(Case('B',1),1),Case('B',1));
     set(new Fou(Case('C',1),1),Case('C',1));
@@ -17,7 +17,7 @@ Board::Board(){
     set(new Cavalier(Case('G',1),1),Case('G',1));
     set(new Tour(Case('H',1),1),Case('H',1));
 
-    // On place les noirs
+    // idem for black
     set(new Tour(Case('A',8),0),Case('A',8));
     set(new Cavalier(Case('B',8),0),Case('B',8));
     set(new Fou(Case('C',8),0),Case('C',8));
@@ -33,10 +33,10 @@ Board::Board(){
         }
     }
     for (int j=0;j<8;j++){
-        set(new Pion(Case(j,1),1),Case(j,1));// on crée les pions blanc
+        set(new Pion(Case(j, 1), 1), Case(j, 1)); // creates white pawns
     }
     for (int j=0;j<8;j++){
-        set(new Pion(Case(j,6),0),Case(j,6));// on crée les pions noirs
+        set(new Pion(Case(j, 6), 0),Case(j, 6)); // creates black pawns
     }
 }
 
@@ -53,24 +53,24 @@ void Board::set_player(Player* Jo1, Player* Jo2){
 }
 
 Piece* Board::operator[](Case c) const{
-    return plateau[c.get(0)*8+c.get(1)];
+    return plateau[c.get(0) * 8 + c.get(1)];
 }
 
 Piece* Board::get(Case c) const{
-    return plateau[c.get(0)*8+c.get(1)];
+    return plateau[c.get(0) * 8 + c.get(1)];
 }
 Piece* Board::get(int i, int j) const{
-    return plateau[i*8+j];
+    return plateau[i * 8 + j];
 }
 
 void Board::set(Piece* p, Case c){
-    plateau[c.get(0)*8+c.get(1)]=p;
+    plateau[c.get(0) * 8 + c.get(1)]=p;
 }
 
 bool Board::bouge(Piece* p, Case c, int i){
     Player* J_moving = nullptr;
     Player* J_waiting = nullptr;
-    switch (p->get_color()) { //J1 est de couleur 1
+    switch (p->get_color()) { // P1 has color 1
     case 0:
         J_moving = J2;
         J_waiting = J1;
@@ -86,19 +86,19 @@ bool Board::bouge(Piece* p, Case c, int i){
     if (i==0){
         return false;
     }
-    else if (i==2 || i==5){ // prise "normale"
+    else if (i==2 || i==5){ // "normal" capture
         delete get(c);
         J_waiting->kill_piece(get(c));
         clr_case(c);
     }
-    else if (i==3){ // prise "en passant"
+    else if (i==3){ // "en passant" capture
         set(nullptr, peut_etre_pris_en_passant->get());
         delete peut_etre_pris_en_passant;
         J_waiting->kill_piece(peut_etre_pris_en_passant);
         Case est_pris_en_passant(c.get(0), p->get().get(1));
         clr_case(est_pris_en_passant);
     }
-    else if (i==7 || i==8){ // petit ou grand roque, on "pré-move" la tour
+    else if (i==7 || i==8){ // king or queen side castling, we "pre-move" the tower
         int row = c.get(1)+1;
         Case case_tour, new_case_tour;
         if (i==7) {
@@ -121,7 +121,8 @@ bool Board::bouge(Piece* p, Case c, int i){
     else{
         peut_etre_pris_en_passant = nullptr;
     }
-    // gestion du roque pour supprimer le droit d'en faire un.
+
+    // management of castling to remove the right to do another one.
     if (p->get_name()=="roi" && (petit_roque || grand_roque)){
         J_moving->set_grand_roque(false);
         J_moving->set_petit_roque(false);
@@ -134,18 +135,19 @@ bool Board::bouge(Piece* p, Case c, int i){
             J_moving->set_petit_roque(false);
         }
     }
-    // fin gestion du roque
+    // end of castling management
+
     if (i==4 || i==5){
         display_promotion(c, p->get_color());
         int promoted = which_promotion(c);
         int col_joueur = p->get_color();
         Case position_p = p->get();
         J_moving->kill_piece(p);
-        delete p; // on supprime le pion en libérant la mémoire
+        delete p; // we remove the pawn, freeing the memory
         if (i==5) {
-            J_waiting->kill_piece(get(c)); // on supprime de la box la pièce prise
+            J_waiting->kill_piece(get(c)); // the captured piece is removed from the box
         }
-        switch(promoted){ // on recréer la pièce
+        switch(promoted){ // recreate the piece
         case 0:
             p = new Cavalier(position_p, col_joueur);
             break;
@@ -159,7 +161,7 @@ bool Board::bouge(Piece* p, Case c, int i){
             p = new Tour(position_p, col_joueur);
             break;
         }
-        J_moving->set_piece(p); // on ajoute à la box a pièce
+        J_moving->set_piece(p); // the piece is added to the box
     }
     go_to(p->get(),c,p);
     set(p,c);
@@ -170,22 +172,23 @@ bool Board::bouge(Piece* p, Case c, int i){
 }
 
 /* Permissions move :
- *  - 0 = Non
- *  - 1 = Oui, case Libre, coup classique
- *  - 2 = Oui, prise de piece
- *  - 3 = Oui, fait une prise en passant
- *  - 4 = Oui, promotion d'un pion.
- *  - 5 = Oui, promotion en prenant
- *  - 6 = Oui, pourra être pris en passant
- *  - 7 = Petit Roque
- *  - 8 = Grand Roque */
+ *  - 0 = No
+ *  - 1 = Yes, free case, classic move
+ *  - 2 = Yes, take a piece
+ *  - 3 = Yes, en passant capture
+ *  - 4 = Yes, pawn promotion
+ *  - 5 = Yes, capture and promotion
+ *  - 6 = Yes, "en passant" capture of the piece will be possible next move
+ *  - 7 = Kingside castling
+ *  - 8 = Queenside castling */
 
 
-// TODO : à compléter (echec)
-int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bouger en connaissant le plateau, string pour indiquer quel piece move
+// TODO : to complete and correct (check management is wrong)
+int Board::permission_bouge(Piece* p, Case c){ // we check moving permissions by knowing the work_board,
+    // the string let us know which piece moves.
     Player* J_moving = nullptr;
     Player* J_waiting = nullptr;
-    switch (p->get_color()) { //J1 est de couleur 1
+    switch (p->get_color()) { // P1's color is 1
     case 0:
         J_moving = J2;
         J_waiting = J1;
@@ -197,11 +200,11 @@ int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bo
     }
     bool petit_roque = J_moving->get_petit_roque();
     bool grand_roque = J_moving->get_grand_roque();
-    if (p == nullptr) return 0; //on ne peut pas bouger du vide
-    if (c == p->get()) return 0; // on ne peut pas bouger sur la même case
+    if (p == nullptr) return 0; // Void can not be moved
+    if (c == p->get()) return 0; // move is not possible on the same spot
     int must_take_or_not = 1;
     if (get(c) != nullptr){
-        if (get(c)->get_color() == p->get_color()) return 0; // On en peut pas prendre une pièce de sa couleur
+        if (get(c)->get_color() == p->get_color()) return 0; // do not capture a piece of your own color
         must_take_or_not = 2;
     }
     if (!p->permission_bouge(c) && p->get_name() != "roi") return 0;
@@ -210,7 +213,8 @@ int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bo
         return must_take_or_not;
     }
 
-    // on teste si il y a des pièces sur le trajet
+    // testing if there is any piece on the move, blocking it
+
     Move dc = d_move(p->get(), c);
     Case c_test = p->get();
     int dx = c.get(0) - c_test.get(0);
@@ -220,22 +224,23 @@ int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bo
         c_test = c_test+dc;
         if (get(c_test) != nullptr) return 0; // Case occupée sur le déplacement
     }
-    /* à ce moment, si la case d'arrivée est occupée, c'est par une pièce de la couleur opposée
-     * la pièce a le droit de faire ce déplacement
-     * il n'y a pas de case occupée sur le trajet
-     * Il ne reste plus rien à vérifier. (à part les pions qui sont source de problèmes
-     * notamment pour la prise en passant ou la prise tout court. et le roi dont le roque est compliqué) */
+
+    /* At this time, if the arrival case is occupied, it is by a piece of the opposite color (and player)
+     * So technically the piece can do the move, there is no occupied case on the move.
+     * There is nothing more to check, except for pawn that are a source of problems,
+     * like for the en passant capture or even the capture
+     * and except for king, whose castling is a little more complicated */
 
     if (p->get_name() == "roi"){
         if (std::abs(dx)==2 && (dy != 0 || (!petit_roque && !grand_roque))) return false;
         if (dx == 2 && petit_roque){
-            if (get(p->get()+dc) != nullptr ||J_moving->can_eat_me(p->get()) || J_moving->can_eat_me(p->get()+dc)) return 0;
+            if (get(p->get()+dc) != nullptr ||J_moving->can_eat_me(p->get()) || J_moving->can_eat_me(p->get() + dc)) return 0;
             else return 7;
         }
         else if (dx == -2 && grand_roque){
             if (get(p->get()+dc) != nullptr || get(p->get()+dc+dc) != nullptr
-                    || J_moving->can_eat_me(p->get()+dc) || J_moving->can_eat_me(p->get()+dc+dc)
-                    || J_moving->can_eat_me(p->get())) return 0; // le chemin doit être libre
+                    || J_moving->can_eat_me(p->get() + dc) || J_moving->can_eat_me(p->get() + dc + dc)
+                    || J_moving->can_eat_me(p->get())) return 0; // path should be free
             else return 8;
         }
         else if (std::abs(dx)==2) return 0;
@@ -243,10 +248,10 @@ int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bo
         else return 0;
     }
     else if (p->get_name() == "pion"){
-        // TODO : à compléter
-        if (std::abs(dy) == 2) return 6; // pourra être pris en passant
-        if (dx==0 && must_take_or_not == 2) return 0; // pion ne peut pas prendre tout droit
-        if (std::abs(dx)==1 && must_take_or_not == 1){ // y a-t-il un pion qu'on peut prendre en passant ?
+        // TODO : to complete (?)
+        if (std::abs(dy) == 2) return 6; // it will be possible to take it with "en passant" capture
+        if (dx==0 && must_take_or_not == 2) return 0; // pawn can not capture straight.
+        if (std::abs(dx)==1 && must_take_or_not == 1){ // is there a pawn that could be "en passant" captured ?
             if (peut_etre_pris_en_passant != nullptr){
                 if (peut_etre_pris_en_passant->get_color() == p->get_color()) return 0;
                 Case sera_pris = peut_etre_pris_en_passant->get();
@@ -269,13 +274,13 @@ int Board::permission_bouge(Piece* p, Case c){ // on teste les permissions de bo
 bool Board::permission_mange(Piece *p, Case c, Piece* ghosted){
     if (c == p->get()) return false;
     if (p->get_name()=="cavalier") {
-        return p->permission_bouge(c); // si je suis un cavalier, on cherche juste à voir si la case est accessible
+        return p->permission_bouge(c); // if it's a knight, just check if case is accessible
     }
     else if (p->get_name()=="pion"){
         Case cp = p->get();
-        int dy = 1; // a white (col=1) pawn can only go up
+        int dy = 1; // a white (col=1) pawn can only go "up"
         if (p->get_color()==0)
-            dy = -1; // a black (col=0) pawn can only go down
+            dy = -1; // a black (col=0) pawn can only go "down"
         return std::abs(cp.get(0)-c.get(0)) == 1 && cp.get(1)+dy == c.get(1);
     }
     else {
@@ -286,9 +291,9 @@ bool Board::permission_mange(Piece *p, Case c, Piece* ghosted){
         int dl = std::max(std::abs(dx), std::abs(dy));
         for (int i=1;i < dl;i++){
             c_test = c_test+dc;
-            if (get(c_test) != nullptr && get(c_test) != ghosted) return false; // Case occupée sur le déplacement
+            if (get(c_test) != nullptr && get(c_test) != ghosted) return false; // Occupied case on the move
         }
-        return p->permission_bouge(c); // on a vérifié que toutes les cases sont libres,
+        return p->permission_bouge(c); // we checked that all the cases were free
     }
 }
 
@@ -299,7 +304,7 @@ void Board::affiche() const{
             if(get(Case(i,j))!=nullptr)
                 std::cout << get(Case(i,j))->get_name() << " ";
             else
-                std::cout << "vide ";
+                std::cout << "empty ";
         }
         std::cout<<std::endl;
     }

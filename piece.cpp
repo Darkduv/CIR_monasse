@@ -22,7 +22,7 @@ std::string Pion::get_name() const {return name;}
 
 
 
-// Gestion des constructeurs des sous classes
+// Management of subclass builders
 
 Roi::Roi(Case c, int couleur) : Piece(c,couleur){}
 Dame::Dame(Case c, int couleur) : Piece(c,couleur){}
@@ -31,9 +31,9 @@ Fou::Fou(Case c, int couleur) : Piece(c,couleur){}
 Tour::Tour(Case c, int couleur) : Piece(c,couleur){}
 Pion::Pion(Case c, int couleur) : Piece(c,couleur){}
 
-/**************************
- * Constructeurs de Piece *
- *************************/
+/******************************
+ * Constructors of the pieces *
+ ******************************/
 
 Piece::Piece()=default;
 Piece::Piece(Case case_depart, int col){
@@ -42,7 +42,7 @@ Piece::Piece(Case case_depart, int col){
 }
 
 /****************************************************
- ******************    bouge     ********************
+ ******************     Move     ********************
  ***************************************************/
 
 void Piece::move(Case case_arrivee){
@@ -62,16 +62,16 @@ void Tour::move(Case case_arrivee){
 }
 
 /****************************************************
- ***************** permission_bouge *****************
+ ***************** permission_move ******************
  ***************************************************/
 
-// Gestion des déplacements possibles
+// Management of possible movements
 
 bool Roi::permission_bouge(Case case_arrive) const {
     return case_arrive.distance(c) <= 1;
 }
 
-bool Dame::permission_bouge(Case case_arrive) const { // déplacement du fou OU de la tour
+bool Dame::permission_bouge(Case case_arrive) const { // The queen has the movements of a bishop or a tower
     return (case_arrive.get(0) == c.get(0) || case_arrive.get(1) == c.get(1)) || (abs(case_arrive.get(0) - c.get(0)) == abs(case_arrive.get(1) - c.get(1)));
 }
 
@@ -87,19 +87,19 @@ bool Tour::permission_bouge(Case case_arrive) const {
     return case_arrive.get(0) == c.get(0) || case_arrive.get(1) == c.get(1);
 }
 
-bool Pion::permission_bouge(Case case_arrive) const { // les noirs=0 en haut les blanc=1 en bas
+bool Pion::permission_bouge(Case case_arrive) const { // black=0 on top, white=1 on bottom
     if (std::abs(case_arrive.get(0)-c.get(0))>1) return false;
-    if (couleur==1){
+    if (couleur == 1){
         if  (case_arrive.get(1)-c.get(1)==1){
             return true;
         }
         else return case_arrive.get(1) - c.get(1) == 2 && case_arrive.get(0) == c.get(0) && c.get(1) == 1;
     }
-    else if (couleur==0){
+    else if (couleur == 0){
             if  (case_arrive.get(1)-c.get(1)==-1){
                 return true;
             }
             else return case_arrive.get(1) - c.get(1) == -2 && case_arrive.get(0) == c.get(0) && c.get(1) == 6;
     }
-    else return false; // jamais atteint normalement
+    else return false; // the function should never reach this point (in theory)
 }
