@@ -148,18 +148,20 @@ bool Board::move(Piece* p, Case c, int i){
             P_waiting->kill_piece(get(c)); // the captured piece is removed from the box
         }
         switch(promoted){ // recreate the piece
-        case 0:
-            p = new Knight(position_p, col_player);
-            break;
-        case 1:
-            p = new Queen(position_p, col_player);
-            break;
-        case 2:
-            p = new Bishop(position_p, col_player);
-            break;
-        case 3:
-            p = new Tower(position_p, col_player);
-            break;
+            case 0:
+                p = new Knight(position_p, col_player);
+                break;
+            case 1:
+                p = new Queen(position_p, col_player);
+                break;
+            case 2:
+                p = new Bishop(position_p, col_player);
+                break;
+            case 3:
+                p = new Tower(position_p, col_player);
+                break;
+            default: // Todo : raise an error
+                break;
         }
         P_moving->set_piece(p); // the piece is added to the box
     }
@@ -243,9 +245,8 @@ int Board::permission_move(Piece* p, Case c){ // we check moving permissions by 
                 || P_moving->can_eat_me(p->get())) return 0; // path should be free
             else return 8;
         }
-        else if (std::abs(dx)==2) return 0;
         else if (p->permission_move(c)) return must_take_or_not;
-        else return 0;
+        else return 0; // does also when "(std::abs(dx)==2)"
     }
     else if (p->get_name() == "pawn"){
         // TODO : to complete (?)

@@ -22,18 +22,18 @@ std::string Pawn::get_name() const {return name;}
 
 // Management of subclass builders
 
-King::King(Case c, int color) : Piece(c, color){}
-Queen::Queen(Case c, int color) : Piece(c, color){}
-Knight::Knight(Case c, int color) : Piece(c, color){}
-Bishop::Bishop(Case c, int color) : Piece(c, color){}
-Tower::Tower(Case c, int color) : Piece(c, color){}
-Pawn::Pawn(Case c, int color) : Piece(c, color){}
+King::King(Case c, int col) : Piece(c, col){}
+Queen::Queen(Case c, int col) : Piece(c, col){}
+Knight::Knight(Case c, int col) : Piece(c, col){}
+Bishop::Bishop(Case c, int col) : Piece(c, col){}
+Tower::Tower(Case c, int col) : Piece(c, col){}
+Pawn::Pawn(Case c, int col) : Piece(c, col){}
 
 /******************************
  * Constructors of the pieces *
  ******************************/
 
-Piece::Piece()=default;
+// Piece::Piece()=default;
 Piece::Piece(Case case_depart, int col){
     color = col;
     c = case_depart;
@@ -65,39 +65,39 @@ void Tower::move(Case end_of_move_case){
 
 // Management of possible movements
 
-bool King::permission_move(Case case_arrive) const {
-    return case_arrive.distance(c) <= 1;
+bool King::permission_move(Case arrival_case) const {
+    return arrival_case.distance(c) <= 1;
 }
 
-bool Queen::permission_move(Case case_arrive) const { // The queen has the movements of a bishop or a tower
-    return (case_arrive.get(0) == c.get(0) || case_arrive.get(1) == c.get(1)) || (abs(case_arrive.get(0) - c.get(0)) == abs(case_arrive.get(1) - c.get(1)));
+bool Queen::permission_move(Case arrival_case) const { // The queen has the movements of a bishop or a tower
+    return (arrival_case.get(0) == c.get(0) || arrival_case.get(1) == c.get(1)) || (abs(arrival_case.get(0) - c.get(0)) == abs(arrival_case.get(1) - c.get(1)));
 }
 
-bool Knight::permission_move(Case case_arrive) const {
-    return abs(case_arrive.get(0) - c.get(0)) * abs(case_arrive.get(1) - c.get(1)) == 2;
+bool Knight::permission_move(Case arrival_case) const {
+    return abs(arrival_case.get(0) - c.get(0)) * abs(arrival_case.get(1) - c.get(1)) == 2;
 }
 
-bool Bishop::permission_move(Case case_arrive) const {
-    return abs(case_arrive.get(0) - c.get(0)) == abs(case_arrive.get(1) - c.get(1));
+bool Bishop::permission_move(Case arrival_case) const {
+    return abs(arrival_case.get(0) - c.get(0)) == abs(arrival_case.get(1) - c.get(1));
 }
 
-bool Tower::permission_move(Case case_arrive) const {
-    return case_arrive.get(0) == c.get(0) || case_arrive.get(1) == c.get(1);
+bool Tower::permission_move(Case arrival_case) const {
+    return arrival_case.get(0) == c.get(0) || arrival_case.get(1) == c.get(1);
 }
 
-bool Pawn::permission_move(Case case_arrive) const { // black=0 on top, white=1 on bottom
-    if (std::abs(case_arrive.get(0)-c.get(0))>1) return false;
+bool Pawn::permission_move(Case arrival_case) const { // black=0 on top, white=1 on bottom
+    if (std::abs(arrival_case.get(0) - c.get(0)) > 1) return false;
     if (color == 1){
-        if  (case_arrive.get(1)-c.get(1)==1){
+        if  (arrival_case.get(1) - c.get(1) == 1){
             return true;
         }
-        else return case_arrive.get(1) - c.get(1) == 2 && case_arrive.get(0) == c.get(0) && c.get(1) == 1;
+        else return arrival_case.get(1) - c.get(1) == 2 && arrival_case.get(0) == c.get(0) && c.get(1) == 1;
     }
     else if (color == 0){
-            if  (case_arrive.get(1)-c.get(1)==-1){
+            if  (arrival_case.get(1) - c.get(1) == -1){
                 return true;
             }
-            else return case_arrive.get(1) - c.get(1) == -2 && case_arrive.get(0) == c.get(0) && c.get(1) == 6;
+            else return arrival_case.get(1) - c.get(1) == -2 && arrival_case.get(0) == c.get(0) && c.get(1) == 6;
     }
     else return false; // the function should never reach this point (in theory)
 }

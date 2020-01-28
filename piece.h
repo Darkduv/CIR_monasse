@@ -10,21 +10,21 @@ protected:
     Case c;
     static std::string const name;
 public:
-    virtual bool permission_move(Case c) const{return false;} // we need to define it (?)
+    virtual bool permission_move(Case aCase) const{return false;} // we need to define it (?)
     virtual std::string get_name() const;
     virtual void move(Case end_of_move_case);
     int get_color() const {return color;}
     Case get(){return c;}
-    Piece(Case c, int couleur);
-    Piece();
-    virtual ~Piece(){}
+    Piece(Case c, int col);
+    // Piece();
+    virtual ~Piece()= default;
 };
 
 class King : public Piece {
     static std::string const name;
 
 public:
-    King(Case c, int color);
+    King(Case c, int col);
     virtual void move(Case c);
     virtual std::string get_name() const;
     virtual bool permission_move(Case case_arrive) const;
@@ -33,7 +33,7 @@ public:
 class Queen : public Piece {
     static std::string const name;
 public:
-    Queen(Case c, int couleur);
+    Queen(Case c, int col);
     virtual std::string get_name() const;
     virtual bool permission_move(Case c) const;
 };
@@ -42,7 +42,7 @@ public:
 class Bishop : public Piece {
     static std::string const name;
 public:
-    Bishop(Case c, int couleur);
+    Bishop(Case c, int col);
     virtual std::string get_name() const;
     virtual bool permission_move(Case c) const;
 };
@@ -50,7 +50,7 @@ public:
 class Knight : public Piece {
     static std::string const name;
 public:
-    Knight(Case c, int color);
+    Knight(Case c, int col);
     virtual std::string get_name() const;
     virtual bool permission_move(Case c) const;
 };
@@ -58,7 +58,7 @@ public:
 class Tower : public Piece {
     static std::string const name;
 public:
-    Tower(Case c, int couleur);
+    Tower(Case c, int col);
     virtual void move(Case c);
     virtual std::string get_name() const;
     virtual bool permission_move(Case c) const;
@@ -67,8 +67,8 @@ public:
 class Pawn : public Piece {
     static std::string const name;
 public:
-    Pawn(Case c, int couleur);
+    Pawn(Case c, int col);
     virtual void move(Case c);
     virtual std::string get_name() const;
-    virtual bool permission_move(Case c) const;
+    virtual bool permission_move(Case arrival_case) const;
 };

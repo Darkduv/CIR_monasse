@@ -72,7 +72,7 @@ Piece* Player::get_my_king(){
 
 bool Player::is_checkmate(){ // not implemented yet
     return false;
-};
+}
 
 bool Player::move(Piece* p, Case c){
     if (p!=nullptr && p->get_color()==get_color()){

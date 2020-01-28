@@ -66,7 +66,7 @@ int main()
     setActiveWindow(w2);
     drawString(30, 60, "We hope you enjoyed playing with this GUI", BLACK);
     drawString(30, 90, "See you later!", BLACK);
-    drawString(20, 140, "Please click on this window to proceed to the GUI.", BLACK,12, 0, false, true);
+    drawString(20, 140, "Please click again on this window to quit the GUI.", BLACK,12, 0, false, true);
     drawString(120, 180, "Coded by Maximin Duvillard and Nicolas Birac", BLACK, 10, 0, true);
     drawString(200, 195, "© - 2019", BLACK, 10, 0, true);
 

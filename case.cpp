@@ -2,17 +2,17 @@
 #include <algorithm>
 #include <cstdlib>
 
-Case::Case(){};
+Case::Case()= default;
 
 Case::Case(const int i, const int j){
     x=i;
     y=j;
-};
+}
 
 Case::Case(const char a, const int k){
     x=int(a)-65; //  'A' --> 0 : in fact int('A') = 65
     y=k-1;
-};
+}
 
 int Case::distance(const Case c_prime) const{
     return std::max(abs(c_prime.x - x), abs(c_prime.y -y));
@@ -30,7 +30,7 @@ int Case::get(const int a) const{
 }
 
 Case Case::operator+(const Case c1) const{
-    return Case(x+c1.x,y+c1.y);
+    return {x+c1.x,y+c1.y};  // return Case(x+c1.x,y+c1.y);
 }
 
 bool Case::operator==(const Case c1) const{
@@ -44,5 +44,5 @@ Move d_move(const Case c_start, const Case c_end){
         dx /= std::abs(dx);
     if (dy != 0)
         dy /= std::abs(dy);
-    return Move(dx, dy);
-};
+    return {dx, dy}; // return Move(dx, dy);
+}
