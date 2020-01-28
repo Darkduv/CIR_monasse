@@ -3,12 +3,12 @@
 // name field.
 
 const std::string Piece::name = "piece";
-const std::string Queen::name = "dame";
-const std::string King::name = "roi";
-const std::string Tower::name = "tour";
-const std::string Knight::name = "cavalier";
-const std::string Bishop::name = "fou";
-const std::string Pawn::name = "pion";
+const std::string Queen::name = "queen";
+const std::string King::name = "king";
+const std::string Tower::name = "tower";
+const std::string Knight::name = "knight";
+const std::string Bishop::name = "bishop";
+const std::string Pawn::name = "pawn";
 
 std::string Piece::get_name() const {return name;}
 std::string King::get_name() const {return name;}

@@ -39,7 +39,8 @@ int main()
     int tour=0;
 
     bool dont_quit = true;
-    // il faut changer la fonction permission mange pour pouvoir l'appeler sur uen case vide pour simuler la présence de la piece sans la déplacer
+    // the permission function need to be changed in order to call it on an empty case
+    // to simulate the presence of the piece without moving it
     while(!J1.get_checkmate() && !J2.get_checkmate() && dont_quit){
         if (tour%2==0){
 

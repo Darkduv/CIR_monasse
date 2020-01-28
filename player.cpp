@@ -15,9 +15,9 @@ Player::Player(Board& p, int col){
     int k=0;
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
-            Piece* piece_parcourue = p[Case(i,j)];
-            if (piece_parcourue!=nullptr && piece_parcourue->get_color()==col){
-                box[k]=piece_parcourue;
+            Piece* processed_piece = p[Case(i, j)];
+            if (processed_piece != nullptr && processed_piece->get_color() == col){
+                box[k]=processed_piece;
                 ++k;
             }
         }
@@ -65,7 +65,7 @@ void Player::set_other_player(Player* J){J2=J;}
 
 Piece* Player::get_my_king(){
     for(int i=0;i<8*2;i++){
-        if(box[i]!=nullptr && box[i]->get_name()=="roi") return box[i];
+        if(box[i]!=nullptr && box[i]->get_name()=="king") return box[i];
     }
     return nullptr;
 }
@@ -78,7 +78,7 @@ bool Player::move(Piece* p, Case c){
     if (p!=nullptr && p->get_color()==get_color()){
         Piece* eater = can_eat_me(get_my_king()->get());
         if (eater != nullptr){
-            if (p->get_name()=="roi"){
+            if (p->get_name()=="king"){
                 ptr_b->set(nullptr, p->get());
                 if (can_eat_me(c) == nullptr){
                     ptr_b->set(p, p->get());
@@ -103,7 +103,7 @@ bool Player::move(Piece* p, Case c){
                     return false;
                 }
             }
-            else { // on mange le checker
+            else { // the checker is captured
                 if (eater->get() == c){
                     ptr_b->set(p,c);
                     ptr_b->set(nullptr, p->get());
@@ -122,7 +122,7 @@ bool Player::move(Piece* p, Case c){
 
             }
         }
-        else if (p->get_name()=="roi"){
+        else if (p->get_name()=="king"){
             if (!can_eat_me(c)) return ptr_b->move(p, c);
             else return false;
         }

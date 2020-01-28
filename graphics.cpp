@@ -31,7 +31,7 @@ void initializer_map_piece(const string& name, const string& col){
 
 void load_all_pieces(){
     const string cols[2] = {"b", "w"};
-    const string names[6] = {"roi", "dame", "fou", "cavalier", "tour", "pion"};
+    const string names[6] = {"king", "queen", "bishop", "knight", "tower", "pawn"};
     for (const auto & col : cols){
         for (const auto & name : names){
             initializer_map_piece(name, col);

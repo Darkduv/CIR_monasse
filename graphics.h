@@ -38,5 +38,5 @@ bool click_move(Player& J,Case& c_start, Case& c_end);
 
 // Promotion
 int which_promotion(const Case c);
-const std::string for_promotion[4] = {"cavalier", "dame", "fou", "tour"};
+const std::string for_promotion[4] = {"knight", "queen", "bishop", "tower"};
 void display_promotion(Case c, int col);

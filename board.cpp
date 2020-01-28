@@ -33,10 +33,10 @@ Board::Board(){
         }
     }
     for (int j=0;j<8;j++){
-        set(new Pawn(Case(j, 1), 1), Case(j, 1));// on crée les pions blanc
+        set(new Pawn(Case(j, 1), 1), Case(j, 1)); // creates white pawns
     }
     for (int j=0;j<8;j++){
-        set(new Pawn(Case(j, 6), 0), Case(j, 6));// on crée les pions noirs
+        set(new Pawn(Case(j, 6), 0), Case(j, 6)); // creates black pawns
     }
 }
 
@@ -68,52 +68,52 @@ void Board::set(Piece* p, Case c){
 }
 
 bool Board::move(Piece* p, Case c, int i){
-    Player* J_moving = nullptr;
-    Player* J_waiting = nullptr;
-    switch (p->get_color()) { //P1 est de color 1
+    Player* P_moving = nullptr;
+    Player* P_waiting = nullptr;
+    switch (p->get_color()) { // P1 has color 1
     case 0:
-        J_moving = P2;
-        J_waiting = P1;
+        P_moving = P2;
+        P_waiting = P1;
         break;
     case 1:
-        J_moving = P1;
-        J_waiting = P2;
+        P_moving = P1;
+        P_waiting = P2;
         break;
     }
-    bool petit_roque = J_moving->get_king_castling();
-    bool grand_roque = J_moving->get_queen_castling();
+    bool kingCastling = P_moving->get_king_castling();
+    bool queenCastling = P_moving->get_queen_castling();
     if (i==-1) i = permission_move(p, c);
     if (i==0){
         return false;
     }
     else if (i==2 || i==5){ // "normal" capture
         delete get(c);
-        J_waiting->kill_piece(get(c));
+        P_waiting->kill_piece(get(c));
         clr_case(c);
     }
-    else if (i==3){ // pri"en passant" capture
+    else if (i==3){ // "en passant" capture
         set(nullptr, can_be_en_passant_captured->get());
         delete can_be_en_passant_captured;
-        J_waiting->kill_piece(can_be_en_passant_captured);
+        P_waiting->kill_piece(can_be_en_passant_captured);
         Case est_pris_en_passant(c.get(0), p->get().get(1));
         clr_case(est_pris_en_passant);
     }
     else if (i==7 || i==8){ // king or queen side castling, we "pre-move" the tower
         int row = c.get(1)+1;
-        Case case_tour, new_case_tour;
+        Case case_tower, new_case_tower;
         if (i==7) {
-            case_tour.set('H', row);
-            new_case_tour.set('F', row);
+            case_tower.set('H', row);
+            new_case_tower.set('F', row);
         }
         else {
-            case_tour.set('A', row);
-            new_case_tour.set('D', row);
+            case_tower.set('A', row);
+            new_case_tower.set('D', row);
         }
-        Piece* tour = get(case_tour);
-        go_to(case_tour, new_case_tour, tour);
-        set(tour, new_case_tour);
-        set(nullptr, case_tour);
-        tour->move(new_case_tour);
+        Piece* tower = get(case_tower);
+        go_to(case_tower, new_case_tower, tower);
+        set(tower, new_case_tower);
+        set(nullptr, case_tower);
+        tower->move(new_case_tower);
     }
     if (i==6){
         can_be_en_passant_captured = p;
@@ -123,16 +123,16 @@ bool Board::move(Piece* p, Case c, int i){
     }
 
     // management of castling to remove the right to do another one.
-    if (p->get_name()=="roi" && (petit_roque || grand_roque)){
-        J_moving->set_queen_castling(false);
-        J_moving->set_king_castling(false);
+    if (p->get_name()=="king" && (kingCastling || queenCastling)){
+        P_moving->set_queen_castling(false);
+        P_moving->set_king_castling(false);
     }
-    else if (p->get_name()=="tour"  && p->get().get(1) == 0+7*((p->get_color()+1)%2)){
-        if (p->get().get(0) == 0 && grand_roque){
-            J_moving->set_queen_castling(false);
+    else if (p->get_name()=="tower"  && p->get().get(1) == 0+7*((p->get_color()+1)%2)){
+        if (p->get().get(0) == 0 && queenCastling){
+            P_moving->set_queen_castling(false);
         }
-        else if (p->get().get(0) == 7 && petit_roque){
-            J_moving->set_king_castling(false);
+        else if (p->get().get(0) == 7 && kingCastling){
+            P_moving->set_king_castling(false);
         }
     }
     // end of castling management
@@ -140,28 +140,28 @@ bool Board::move(Piece* p, Case c, int i){
     if (i==4 || i==5){
         display_promotion(c, p->get_color());
         int promoted = which_promotion(c);
-        int col_joueur = p->get_color();
+        int col_player = p->get_color();
         Case position_p = p->get();
-        J_moving->kill_piece(p);
-        delete p; // on supprime le pion en libérant la mémoire
+        P_moving->kill_piece(p);
+        delete p; // we remove the pawn, freeing the memory
         if (i==5) {
-            J_waiting->kill_piece(get(c)); // on supprime de la box la pièce prise
+            P_waiting->kill_piece(get(c)); // the captured piece is removed from the box
         }
         switch(promoted){ // recreate the piece
         case 0:
-            p = new Knight(position_p, col_joueur);
+            p = new Knight(position_p, col_player);
             break;
         case 1:
-            p = new Queen(position_p, col_joueur);
+            p = new Queen(position_p, col_player);
             break;
         case 2:
-            p = new Bishop(position_p, col_joueur);
+            p = new Bishop(position_p, col_player);
             break;
         case 3:
-            p = new Tower(position_p, col_joueur);
+            p = new Tower(position_p, col_player);
             break;
         }
-        J_moving->set_piece(p); // on ajoute à la box a pièce
+        P_moving->set_piece(p); // the piece is added to the box
     }
     go_to(p->get(),c,p);
     set(p,c);
@@ -184,7 +184,8 @@ bool Board::move(Piece* p, Case c, int i){
 
 
 // TODO : to complete and correct (check management is wrong)
-int Board::permission_move(Piece* p, Case c){ // on teste les permissions de bouger en connaissant le work_board, string pour indiquer quel piece move
+int Board::permission_move(Piece* p, Case c){ // we check moving permissions by knowing the work_board,
+    // the string let us know which piece moves.
     Player* P_moving = nullptr;
     Player* P_waiting = nullptr;
     switch (p->get_color()) { // P1's color is 1
@@ -206,9 +207,9 @@ int Board::permission_move(Piece* p, Case c){ // on teste les permissions de bou
         if (get(c)->get_color() == p->get_color()) return 0; // do not capture a piece of your own color
         must_take_or_not = 2;
     }
-    if (!p->permission_move(c) && p->get_name() != "roi") return 0;
+    if (!p->permission_move(c) && p->get_name() != "king") return 0;
 
-    if (p->get_name()=="cavalier") {
+    if (p->get_name()=="knight") {
         return must_take_or_not;
     }
 
@@ -230,7 +231,7 @@ int Board::permission_move(Piece* p, Case c){ // on teste les permissions de bou
      * like for the en passant capture or even the capture
      * and except for king, whose castling is a little more complicated */
 
-    if (p->get_name() == "roi"){
+    if (p->get_name() == "king"){
         if (std::abs(dx)==2 && (dy != 0 || (!king_castling && !queen_castling))) return false;
         if (dx == 2 && king_castling){
             if (get(p->get()+dc) != nullptr || P_moving->can_eat_me(p->get()) || P_moving->can_eat_me(p->get() + dc)) return 0;
@@ -246,7 +247,7 @@ int Board::permission_move(Piece* p, Case c){ // on teste les permissions de bou
         else if (p->permission_move(c)) return must_take_or_not;
         else return 0;
     }
-    else if (p->get_name() == "pion"){
+    else if (p->get_name() == "pawn"){
         // TODO : to complete (?)
         if (std::abs(dy) == 2) return 6; // it will be possible to take it with "en passant" capture
         if (dx==0 && must_take_or_not == 2) return 0; // pawn can not capture straight.
@@ -272,10 +273,10 @@ int Board::permission_move(Piece* p, Case c){ // on teste les permissions de bou
 
 bool Board::permission_capture(Piece *p, Case c, Piece* ghosted){
     if (c == p->get()) return false;
-    if (p->get_name()=="cavalier") {
+    if (p->get_name()=="knight") {
         return p->permission_move(c); // if it's a knight, just check if case is accessible
     }
-    else if (p->get_name()=="pion"){
+    else if (p->get_name()=="pawn"){
         Case cp = p->get();
         int dy = 1; // a white (col=1) pawn can only go "up"
         if (p->get_color()==0)
