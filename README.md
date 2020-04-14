@@ -17,6 +17,6 @@ Due to lack of time, we didn't do an AI, but the board is fully operational and 
 
 ### To Do List
 - [x] Board, moving pieces, checking rules
-- [ ] Correct management of check, discored check in particular
+- [ ] Correct management of check, discovered check in particular
 - [ ] Online/distance two player
 - [ ] AI
